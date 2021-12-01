@@ -1,13 +1,15 @@
 import './App.sass';
 import MainPage from './components/mainPage/mainPage';
-import LoginForm from './components/loginForm/loginForm';
+import { Provider } from 'react-redux';
+import store from './redux/store';
 
 function App() {
-  const logged = true;
   return (
-    <div className="app">
-      {logged ? <MainPage /> : <LoginForm />}
-    </div>
+    <Provider store={store}>
+      <div className="app">
+        <MainPage />
+      </div>
+    </Provider>
   );
 }
 
