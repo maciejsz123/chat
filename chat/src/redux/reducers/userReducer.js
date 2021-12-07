@@ -3,7 +3,7 @@ import { SET_LOGIN, SET_PASSWORD } from '../actions/types';
 const initialState = {
   login: 'qwer1234',
   password: 'qwer',
-  logged: false
+  logged: true
 }
 
 export default function reducer(state = initialState, action) {

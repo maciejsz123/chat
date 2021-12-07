@@ -3,7 +3,9 @@ import './chats.sass';
 
 function Chats(props) {
   return (
-    <div id='chats'>chats</div>
+    <div id='chats'>
+      chats
+    </div>
   )
 }
 
