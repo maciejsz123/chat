@@ -1,15 +1,35 @@
 const express = require('express');
-const app = express();
-const http = require('http');
-const server = http.createServer(app);
 const PORT = 5000;
-const { Server } = require("socket.io");
-const io = new Server(server);
+const cors = require('cors');
 
-app.get('/', (req, res) => {
-  res.send('<h1>hello</h1>');
+const app = express();
+const http = require('http').createServer(app);
+const io = require('socket.io')(http, {
+  cors: {
+    origin: '*',
+  }
 });
 
-server.listen(PORT, () => {
-  console.log('listening on *:' + PORT);
+app.use(cors());
+app.use(express.json());
+
+http.listen(PORT, () => {
+  console.log('listening on:' + PORT);
 });
+
+let arr = '';
+
+io.on('connection', socket => {
+  console.log('new connection');
+
+  socket.emit('privateMessage', arr)
+
+  socket.on('addElem', (elem) => {
+    arr = elem;
+    socket.emit('privateMessage', arr);
+  })
+
+  socket.on('disconnect', () => {
+    console.log('disconnected');
+  })
+})
