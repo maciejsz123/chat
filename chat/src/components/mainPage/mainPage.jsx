@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 import './mainPage.sass';
 
 function MainPage(props) {
-  if(!props.logged) {
+  if(props.logged) {
     return <LoginForm />
   } else {
 

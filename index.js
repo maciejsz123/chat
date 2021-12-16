@@ -17,10 +17,25 @@ http.listen(PORT, () => {
   console.log('listening on:' + PORT);
 });
 
+let chat = {
+  chatName: 'private',
+  messages: [
+    {user: 'maciej', message: 'dupa', id: 0},
+    {user: 'marcin', message: 'one11', id: 1}
+  ]
+}
+
 let arr = '';
 
 io.on('connection', socket => {
   console.log('new connection');
+
+  socket.emit('chat', chat);
+
+  socket.on('addMessage', (elem) => {
+    chat.messages.push(elem);
+    socket.emit('chat', chat);
+  })
 
   socket.emit('privateMessage', arr)
 
