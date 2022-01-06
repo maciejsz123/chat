@@ -1,7 +1,7 @@
 import React from 'react';
 import './loginForm.sass';
 import { connect } from 'react-redux';
-import { setLogin, setPassword, setActualUser } from '../../redux/actions/userActions';
+import { setLogin, setPassword, setActualUser, setUsers } from '../../redux/actions/userActions';
 const axios = require('axios');
 
 function LoginForm(props) {
@@ -13,6 +13,12 @@ function LoginForm(props) {
       })
       .then( resp => {
         props.setActualUser(resp.data);
+      })
+      .then( users => {
+        axios.get('http://localhost:5000/users')
+        .then( users => {
+          props.setUsers(users.data)
+        })
       })
       .catch( err => {
         console.log(err.data);
@@ -62,4 +68,4 @@ const mapStateToProps = state => {
   }
 }
 
-export default connect(mapStateToProps, { setLogin, setPassword, setActualUser })(LoginForm);
+export default connect(mapStateToProps, { setLogin, setPassword, setActualUser, setUsers })(LoginForm);

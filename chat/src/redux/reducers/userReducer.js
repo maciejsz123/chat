@@ -1,9 +1,10 @@
-import { SET_LOGIN, SET_PASSWORD, SET_ACTUAL_USER } from '../actions/types';
+import { SET_LOGIN, SET_PASSWORD, SET_ACTUAL_USER, SET_USERS } from '../actions/types';
 
 const initialState = {
   login: 'test',
   password: 'test',
-  actualUser: null
+  actualUser: null,
+  users: []
 }
 
 export default function reducer(state = initialState, action) {
@@ -22,6 +23,11 @@ export default function reducer(state = initialState, action) {
       return {
         ...state,
         actualUser: action.payload
+      }
+    case SET_USERS:
+      return {
+        ...state,
+        users: action.payload
       }
     default:
       return state

@@ -42,7 +42,7 @@ router.route('/register').post(urlencodedParser, (req, res) => {
     const password = hash;
 
     const newUser = new User({ name, lastName, username, password });
-
+    
     newUser.save()
       .then( () => res.json('User added'))
       .catch( err => res.send(err))

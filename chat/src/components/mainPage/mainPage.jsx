@@ -2,13 +2,13 @@ import React from 'react';
 import Chats from '../chats/chats';
 import ChatBox from '../chatBox/chatBox';
 import Contacts from '../contacts/contacts';
-import LoginForm from '../loginForm/loginForm';
+import LoginPage from '../loginForm/loginPage';
 import { connect } from 'react-redux';
 import './mainPage.sass';
 
 function MainPage(props) {
   if(!props.actualUser) {
-    return <LoginForm />
+    return <LoginPage />
   } else {
 
     return (
