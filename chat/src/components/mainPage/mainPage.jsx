@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 import './mainPage.sass';
 
 function MainPage(props) {
-  if(props.logged) {
+  if(!props.actualUser) {
     return <LoginForm />
   } else {
 
@@ -23,7 +23,7 @@ function MainPage(props) {
 
 const mapStateToProps = state => {
   return {
-    logged: state.user.logged
+    actualUser: state.user.actualUser
   }
 }
 

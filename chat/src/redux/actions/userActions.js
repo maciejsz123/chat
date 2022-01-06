@@ -1,4 +1,4 @@
-import { SET_LOGIN, SET_PASSWORD } from './types';
+import { SET_LOGIN, SET_PASSWORD, SET_ACTUAL_USER } from './types';
 
 export const setLogin = (value) => dispatch => {
   dispatch({
@@ -10,6 +10,13 @@ export const setLogin = (value) => dispatch => {
 export const setPassword = (value) => dispatch => {
   dispatch({
     type: SET_PASSWORD,
+    payload: value
+  })
+}
+
+export const setActualUser = value => dispatch => {
+  dispatch({
+    type: SET_ACTUAL_USER,
     payload: value
   })
 }

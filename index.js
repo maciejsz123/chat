@@ -1,6 +1,12 @@
 const express = require('express');
-const PORT = 5000;
 const cors = require('cors');
+const mongoose = require('mongoose');
+
+require('dotenv').config();
+const PORT = process.env.PORT || 5000;
+
+const ATLAS_URI = process.env.ATLAS_URI;
+mongoose.connect(ATLAS_URI);
 
 const app = express();
 const http = require('http').createServer(app);
@@ -15,6 +21,14 @@ app.use(express.json());
 
 http.listen(PORT, () => {
   console.log('listening on:' + PORT);
+});
+
+const userRouter = require('./routes/userRoute');
+
+app.use('/users', userRouter);
+
+app.get('/user', (req, res) => {
+  res.send('asdf')
 });
 
 let chat = {

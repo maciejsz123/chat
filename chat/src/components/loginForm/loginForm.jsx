@@ -1,39 +1,56 @@
 import React from 'react';
 import './loginForm.sass';
 import { connect } from 'react-redux';
-import { setLogin, setPassword } from '../../redux/actions/userActions';
+import { setLogin, setPassword, setActualUser } from '../../redux/actions/userActions';
+const axios = require('axios');
 
 function LoginForm(props) {
+  function sendData(e) {
+    e.preventDefault();
+    axios.post('http://localhost:5000/users/login', {
+        username: props.user.login,
+        password: props.user.password
+      })
+      .then( resp => {
+        props.setActualUser(resp.data);
+      })
+      .catch( err => {
+        console.log(err.data);
+      })
+  }
+
   return (
     <div id='login-page'>
       <div className='login-form'>
-        <div>
+        <form onSubmit={(e) => sendData(e)}>
+          <div>
 
-          <input
-            type='text'
-            placeholder='login'
-            className='login-input'
-            maxLength='20'
-            value={props.user.login}
-            onChange={e => props.setLogin(e.target.value)}
-          />
+            <input
+              type='text'
+              placeholder='login'
+              className='login-input'
+              maxLength='20'
+              value={props.user.login}
+              onChange={e => props.setLogin(e.target.value)}
+            />
 
-        </div>
-        <div>
+          </div>
+          <div>
 
-          <input
-            type='password'
-            placeholder='password'
-            className='login-input'
-            maxLength='20'
-            value={props.user.password}
-            onChange={e => props.setPassword(e.target.value)}
-          />
+            <input
+              type='password'
+              placeholder='password'
+              className='login-input'
+              maxLength='20'
+              value={props.user.password}
+              onChange={e => props.setPassword(e.target.value)}
+            />
 
-        </div>
-        <div>
-          <button type='button'>login</button>
-        </div>
+          </div>
+          <div>
+            <button>login</button>
+          </div>
+        </form>
       </div>
     </div>
   )
@@ -45,4 +62,4 @@ const mapStateToProps = state => {
   }
 }
 
-export default connect(mapStateToProps, { setLogin, setPassword })(LoginForm);
+export default connect(mapStateToProps, { setLogin, setPassword, setActualUser })(LoginForm);
