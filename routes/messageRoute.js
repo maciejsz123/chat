@@ -21,4 +21,17 @@ router.route('/add').post(urlencodedParser, (req, res) => {
   )
 })
 
+router.route('/delete/:id').delete(urlencodedParser, (req, res) => {
+
+  const userId = req.body.userId;
+  const message = req.body.message;
+
+  const newMessage = new Message({ userId, message });
+
+  newMessage.delete()
+    .then( () => res.json('User added'))
+    .catch( err => res.send(err))
+  )
+})
+
 module.exports = router;
