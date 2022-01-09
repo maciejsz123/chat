@@ -26,8 +26,7 @@ function LoginForm(props) {
   }
 
   return (
-    <div id='login-page'>
-      <div className='login-form'>
+      <div>
         <form onSubmit={(e) => sendData(e)}>
           <div>
 
@@ -53,12 +52,11 @@ function LoginForm(props) {
             />
 
           </div>
-          <div>
-            <button>login</button>
+          <div className='submit-button-container'>
+            <button className='submit-button'>login</button>
           </div>
         </form>
       </div>
-    </div>
   )
 }
 

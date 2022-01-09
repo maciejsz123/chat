@@ -25,15 +25,14 @@ function RegisterForm(props) {
   }
 
   return (
-    <div id='login-page'>
-      <div className='login-form'>
+      <div>
         <form onSubmit={(e) => register(e)}>
           <div>
 
             <input
               type='text'
               placeholder='name'
-              className='name-input'
+              className='login-input'
               maxLength='20'
               value={name}
               onChange={e => setName(e.target.value)}
@@ -45,7 +44,7 @@ function RegisterForm(props) {
             <input
               type='text'
               placeholder='last name'
-              className='last-name-input'
+              className='login-input'
               maxLength='20'
               value={lastName}
               onChange={e => setLastName(e.target.value)}
@@ -76,12 +75,11 @@ function RegisterForm(props) {
             />
 
           </div>
-          <div>
-            <button>register</button>
+          <div className='submit-button-container'>
+            <button className='submit-button'>register</button>
           </div>
         </form>
       </div>
-    </div>
   )
 }
 

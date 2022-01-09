@@ -8,9 +8,23 @@ function LoginPage(props) {
 
   return (
     <div>
-      <div onClick={ () => setFormSelect('login')}>login</div>
-      <div onClick={ () => setFormSelect('register')}>register</div>
-      {formSelect === 'login' ? <LoginForm /> : <RegisterForm />}
+      <div id='login-page'>
+        <div className='login-form'>
+          <div className='login-header'>
+            <div
+              onClick={ () => setFormSelect('login')}
+              style={{ color: formSelect === 'login' ? 'black' : 'white'}}>
+              login
+            </div>
+            <div
+              onClick={ () => setFormSelect('register')}
+              style={{ color: formSelect !== 'login' ? 'black' : 'white'}}>
+              register
+            </div>
+          </div>
+          {formSelect === 'login' ? <LoginForm /> : <RegisterForm />}
+        </div>
+      </div>
     </div>
   )
 }
