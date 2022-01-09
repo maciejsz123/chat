@@ -16,6 +16,8 @@ const io = require('socket.io')(http, {
   }
 });
 
+exports.io = io;
+
 app.use(cors());
 app.use(express.json());
 
@@ -24,41 +26,7 @@ http.listen(PORT, () => {
 });
 
 const userRouter = require('./routes/userRoute');
+const messageRouter = require('./routes/messageRoute');
 
 app.use('/users', userRouter);
-
-app.get('/user', (req, res) => {
-  res.send('asdf')
-});
-
-let chat = {
-  chatName: 'private',
-  messages: [
-    {user: 'maciej', message: 'dupa', id: 0},
-    {user: 'marcin', message: 'one11', id: 1}
-  ]
-}
-
-let arr = '';
-
-io.on('connection', socket => {
-  console.log('new connection');
-
-  socket.emit('chat', chat);
-
-  socket.on('addMessage', (elem) => {
-    chat.messages.push(elem);
-    socket.emit('chat', chat);
-  })
-
-  socket.emit('privateMessage', arr)
-
-  socket.on('addElem', (elem) => {
-    arr = elem;
-    socket.emit('privateMessage', arr);
-  })
-
-  socket.on('disconnect', () => {
-    console.log('disconnected');
-  })
-})
+app.use('/messages', messageRouter);
