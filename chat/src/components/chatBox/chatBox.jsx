@@ -22,12 +22,11 @@ function ChatBox(props) {
   }, [])
 
   useEffect( () => {
-    socket.on('receiveMessageBack', ({ userId, chatName, message }) => {
-      setChat([...chat, {userId, chatName, message}])
+    socket.on('receiveMessageBack', ({ messageId, userId, chatName, message }) => {
+      setChat([...chat, {_id: messageId, userId, chatName, message}])
     })
 
     return () => {
-      socket.emit('disc');
       socket.off();
     }
   }, [chat])
@@ -47,7 +46,7 @@ function ChatBox(props) {
       setMessage('');
     }
   }
-
+  console.log(chat);
   return (
     <div id='chat-div'>
       <div id='chat-box'>
