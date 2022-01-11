@@ -3,36 +3,26 @@ import { connect } from 'react-redux';
 import './chatBox.sass';
 import MyMessage from '../myMessage/myMessage';
 import OtherUserMessage from '../otherUserMessage/otherUserMessage';
+import { addMessageToChat } from '../../actions/chatActions';
 import axios from 'axios';
 import io from 'socket.io-client';
 const socket = io.connect('http://localhost:5000');
 
 function ChatBox(props) {
   const [message, setMessage] = useState('');
-  const [chat, setChat] = useState([]);
 
   useEffect( () => {
-    axios.get('http://localhost:5000/messages')
-      .then( resp => {
-        setChat(resp.data)
-      })
-      .catch( err => {
-        console.log(err);
-      })
-  }, [])
-
-  useEffect( () => {
-    socket.on('receiveMessageBack', ({ messageId, userId, chatName, message }) => {
-      setChat([...chat, {_id: messageId, userId, chatName, message}])
+    socket.on('receiveMessageBack', ({ messageId, userId, chatTypem chatName, message }) => {
+      props.addMessageToChat([{_id: messageId, userId, chatType, chatName, message}])
     })
 
     return () => {
       socket.off();
     }
-  }, [chat])
+  }, [props.chat])
 
   const elements = [];
-  for (const elem of chat) {
+  for (const elem of props.chat) {
     if(elem.userId === props.actualUser._id) {
       elements.push(<MyMessage message={elem.message} key={elem._id} />);
     } else {
@@ -42,11 +32,11 @@ function ChatBox(props) {
 
   function sendMessage(e) {
     if(e._reactName === 'onClick' || e.key === "Enter") {
-      socket.emit('message', ({userId: props.actualUser._id, chatName: 'private', message: message}))
+      socket.emit('message', ({userId: props.actualUser._id, chatType: 'private', chatName: 'maciej', message: message}))
       setMessage('');
     }
   }
-  console.log(chat);
+
   return (
     <div id='chat-div'>
       <div id='chat-box'>
@@ -69,8 +59,9 @@ function ChatBox(props) {
 
 const mapStateToProps = state => {
   return {
-    actualUser: state.user.actualUser
+    actualUser: state.user.actualUser,
+    chat: state.chat.chat
   }
 }
 
-export default connect(mapStateToProps, {})(ChatBox);
+export default connect(mapStateToProps, { addMessageToChat })(ChatBox);

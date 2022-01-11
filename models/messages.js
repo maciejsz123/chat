@@ -3,12 +3,9 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const messageSchema = new Schema({
-  userId: {
-    type: String
-  },
-  chatName: {
-    type: String
-  },
+  userId: String,
+  chatName: String,
+  chatType: String,
   message: {
     type: String,
     required: true
