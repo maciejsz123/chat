@@ -5,7 +5,7 @@ import { setChat, setChatName } from '../../redux/chatActions';
 
 function Chats(props) {
   useEffect( () => {
-    axios.get('http://localhost:5000/messages')
+    axios.get('http://localhost:5000/chats')
       .then( resp => {
         props.setChat(resp.data)
       })

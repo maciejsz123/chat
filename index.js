@@ -27,6 +27,8 @@ http.listen(PORT, () => {
 
 const userRouter = require('./routes/userRoute');
 const messageRouter = require('./routes/messageRoute');
+const chatRouter = require('./routes/chatRouter');
 
 app.use('/users', userRouter);
 app.use('/messages', messageRouter);
+app.use('/chats', chatRouter);

@@ -4,8 +4,7 @@ const Schema = mongoose.Schema;
 
 const messageSchema = new Schema({
   userId: String,
-  chatName: String,
-  chatType: String,
+  chatId: String,
   message: {
     type: String,
     required: true
