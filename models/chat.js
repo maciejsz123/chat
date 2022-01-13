@@ -7,8 +7,7 @@ const chatSchema = new Schema({
   privateType: {
     type: Boolean //private if false it's group
   },
-  users: Array,
-  messages: Array
+  users: Array
 })
 
 const Chat = mongoose.model('Chat', chatSchema);

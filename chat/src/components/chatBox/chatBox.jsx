@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import './chatBox.sass';
 import MyMessage from '../myMessage/myMessage';
 import OtherUserMessage from '../otherUserMessage/otherUserMessage';
-import { addMessageToChat } from '../../actions/chatActions';
+import { addMessageToChat, setMessages } from '../../redux/actions/chatActions';
 import axios from 'axios';
 import io from 'socket.io-client';
 const socket = io.connect('http://localhost:5000');
@@ -12,8 +12,18 @@ function ChatBox(props) {
   const [message, setMessage] = useState('');
 
   useEffect( () => {
-    socket.on('receiveMessageBack', ({ messageId, userId, chatTypem chatName, message }) => {
-      props.addMessageToChat([{_id: messageId, userId, chatType, chatName, message}])
+    axios.get('http://localhost:5000/messages')
+      .then( resp => {
+        props.setMessages(resp.data)
+      })
+      .catch( err => {
+        console.log(err);
+      })
+  }, [])
+
+  useEffect( () => {
+    socket.on('receiveMessageBack', ({ messageId, userId, chatId, message }) => {
+      props.addMessageToChat([{_id: messageId, userId, chatId, message}])
     })
 
     return () => {
@@ -22,7 +32,7 @@ function ChatBox(props) {
   }, [props.chat])
 
   const elements = [];
-  for (const elem of props.chat) {
+  for (const elem of props.chat.messages) {
     if(elem.userId === props.actualUser._id) {
       elements.push(<MyMessage message={elem.message} key={elem._id} />);
     } else {
@@ -60,8 +70,8 @@ function ChatBox(props) {
 const mapStateToProps = state => {
   return {
     actualUser: state.user.actualUser,
-    chat: state.chat.chat
+    chat: state.chat
   }
 }
 
-export default connect(mapStateToProps, { addMessageToChat })(ChatBox);
+export default connect(mapStateToProps, { addMessageToChat, setMessages })(ChatBox);

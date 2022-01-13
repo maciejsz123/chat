@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import './chats.sass';
 import { connect } from 'react-redux';
-import { setChat, setChatName } from '../../redux/chatActions';
+import axios from 'axios';
+import { setChat, setChatName } from '../../redux/actions/chatActions';
 
 function Chats(props) {
   useEffect( () => {
@@ -12,25 +13,17 @@ function Chats(props) {
       .catch( err => {
         console.log(err);
       })
-  }, [, props.chat.chatName])
+  }, [props.chat.name])
 
-  let privateChats = props.chat.filter( v => v.chatType === 'private')
-    .map( v => {
-      if(v) {
-        return (
-          <div key={v._id} onClick={() => props.setChatName(v.chatName)}>{v.chatName}</div>
-        )
-      }
-    })
+  let privateChats = props.chat.chat.filter( v => v.privateType)
+    .map( v => (
+      <div key={v._id} onClick={() => props.setChatName(v.name)}>{v.name}</div>
+    ))
 
-  let privateChats = props.chat.filter( v => v.chatType === 'groupChat')
-    .map( v => {
-      if(v) {
-        return (
-          <div key={v._id} onClick={() => props.setChatName(v.chatName)}>{v.chatName}</div>
-        )
-      }
-    })
+  let groupChats = props.chat.chat.filter( v => !v.privateType)
+    .map( v => (
+      <div key={v._id} onClick={() => props.setChatName(v.name)}>{v.name}</div>
+    ))
 
   return (
     <div id='chats'>
@@ -40,7 +33,7 @@ function Chats(props) {
       </div>
       <div>
         <div>Group chats</div>
-        {groupChat}
+        {groupChats}
       </div>
     </div>
   )

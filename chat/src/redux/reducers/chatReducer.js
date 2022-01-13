@@ -1,8 +1,9 @@
-import { SET_CHAT, SET_CHAT_NAME, ADD_MESSAGE_TO_CHAT } from '../actions/types';
+import { SET_CHAT, SET_CHAT_NAME, ADD_MESSAGE_TO_CHAT, SET_MESSAGES } from '../actions/types';
 
 const initialState = {
   chat: [],
-  chatName: ''
+  messages: [],
+  chatNameId: ''
 }
 
 const chatReducer = (state = initialState, action) => {
@@ -14,13 +15,18 @@ const chatReducer = (state = initialState, action) => {
       }
     case SET_CHAT_NAME:
       return{
-        ..state,
+        ...state,
         chatName: action.payload
       }
     case ADD_MESSAGE_TO_CHAT:
       return {
         ...state,
-        chat: [...state.chat, action.payload]
+        messages: [...state.messages, action.payload]
+      }
+    case SET_MESSAGES:
+      return {
+        ...state,
+        messages: action.payload
       }
     default:
       return state

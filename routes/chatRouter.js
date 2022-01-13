@@ -13,8 +13,9 @@ router.route('/add').post(urlencodedParser, (req, res) => {
 
   const name = req.body.name;
   const privateType = req.body.privateType;
+  const users = req.body.users;
 
-  const newChat = new Chat({ name, privateType, users: [], messages: [] });
+  const newChat = new Chat({ name, privateType, users });
 
   newChat.save()
     .then( () => res.json('Chat added'))
