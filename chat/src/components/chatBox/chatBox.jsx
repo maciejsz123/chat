@@ -14,22 +14,30 @@ function ChatBox(props) {
   useEffect( () => {
     axios.get('http://localhost:5000/messages')
       .then( resp => {
-        props.setMessages(resp.data)
+        let elements = resp.data.filter( v => v.chatId === props.chat.chatNameId._id);
+        props.setMessages(elements)
       })
       .catch( err => {
         console.log(err);
       })
-  }, [])
+  }, [props.chat.chatNameId])
 
   useEffect( () => {
     socket.on('receiveMessageBack', ({ messageId, userId, chatId, message }) => {
-      props.addMessageToChat([{_id: messageId, userId, chatId, message}])
+      props.addMessageToChat({_id: messageId, userId, chatId, message})
     })
 
     return () => {
       socket.off();
     }
   }, [props.chat])
+
+  function sendMessage(e) {
+    if(e._reactName === 'onClick' || e.key === "Enter") {
+      socket.emit('message', ({ userId: props.actualUser._id, chatId: props.chat.chatNameId._id, message }))
+      setMessage('');
+    }
+  }
 
   const elements = [];
   for (const elem of props.chat.messages) {
@@ -39,19 +47,12 @@ function ChatBox(props) {
       elements.push(<OtherUserMessage message={elem.message} key={elem._id}/>);
     }
   }
-
-  function sendMessage(e) {
-    if(e._reactName === 'onClick' || e.key === "Enter") {
-      socket.emit('message', ({userId: props.actualUser._id, chatType: 'private', chatName: 'maciej', message: message}))
-      setMessage('');
-    }
-  }
-
+  
   return (
     <div id='chat-div'>
       <div id='chat-box'>
         <div id='chat-name'>
-          { elements.length ? elements[0].chatName : '' }
+          { props.chat.chatNameId === '' ? '' : props.chat.chatNameId.name + ' ' + (props.chat.chatNameId.lastName || '') }
         </div>
         <div id='chat-field'>
           { elements }
@@ -69,6 +70,7 @@ function ChatBox(props) {
 
 const mapStateToProps = state => {
   return {
+    users: state.user.users,
     actualUser: state.user.actualUser,
     chat: state.chat
   }

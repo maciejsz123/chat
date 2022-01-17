@@ -6,3 +6,4 @@ export const SET_CHAT = 'SET_CHAT';
 export const SET_CHAT_NAME = 'SET_CHAT_NAME';
 export const ADD_MESSAGE_TO_CHAT = 'ADD_MESSAGE_TO_CHAT';
 export const SET_MESSAGES = 'SET_MESSAGES';
+export const ADD_CHAT = 'ADD_CHAT';

@@ -9,18 +9,26 @@ router.route('/').get( (req, res) => {
     .catch( err => res.status(400).json('Error: ' + err))
 })
 
-router.route('/add').post(urlencodedParser, (req, res) => {
+io.on('connection', socket => {
+  socket.on('createChat', ({ name, privateType, users }) => {
+    try {
+      const newChat = new Chat({ name, privateType, users});
+      newChat.save()
+        .then( data => {
+          return data._id;
+        })
+        .then( data => {
+          io.emit('receiveChatBack', { chatId: data, name, privateType, users })
+        })
+    } catch(err) {
+      throw(err);
+    }
+  })
 
-  const name = req.body.name;
-  const privateType = req.body.privateType;
-  const users = req.body.users;
-
-  const newChat = new Chat({ name, privateType, users });
-
-  newChat.save()
-    .then( () => res.json('Chat added'))
-    .catch( err => res.send(err))
-})
+  socket.on('disconnect', () => {
+    console.log('disconnected');
+  })
+});
 
 router.route('/:id').delete( (req,res) => {
   Chat.findByIdAndDelete(req.params.id)

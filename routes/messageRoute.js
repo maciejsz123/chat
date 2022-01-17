@@ -10,18 +10,18 @@ router.route('/').get( (req, res) => {
 })
 
 io.on('connection', socket => {
-  let messageId = null;
-  socket.on('message', ({ userId, chatName, message }) => {
+  socket.on('message', ({ userId, chatId, message }) => {
     try {
-      const newMessage = new Message({ userId, chatName, message});
+      const newMessage = new Message({ userId, chatId, message});
       newMessage.save()
         .then( data => {
-          messageId = data._id
+          return data._id;
+        })
+        .then( data => {
+          io.emit('receiveMessageBack', { messageId: data, userId, chatId, message })
         })
     } catch(err) {
       throw(err);
-    } finally{
-      io.emit('receiveMessageBack', { messageId, userId, chatName, message })
     }
   })
 

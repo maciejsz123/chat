@@ -1,10 +1,25 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import './chats.sass';
 import { connect } from 'react-redux';
 import axios from 'axios';
-import { setChat, setChatName } from '../../redux/actions/chatActions';
+import { setChat, setChatName, addChat } from '../../redux/actions/chatActions';
+import io from 'socket.io-client';
+const socket = io.connect('http://localhost:5000');
 
 function Chats(props) {
+  const [createButtonVisible, setCreateButtonVisible] = useState(true);
+  const [groupChatName, setGroupChatName] = useState('');
+
+  useEffect( () => {
+    document.addEventListener( 'click', v => {
+      if(v.target.id === 'create-chat-button' || v.target.id === 'create-chat-input') {
+
+      } else if(v.target.id !== 'create-chat-button') {
+        setCreateButtonVisible(true);
+      }
+    })
+  }, [])
+
   useEffect( () => {
     axios.get('http://localhost:5000/chats')
       .then( resp => {
@@ -13,27 +28,92 @@ function Chats(props) {
       .catch( err => {
         console.log(err);
       })
-  }, [props.chat.name])
+  }, [props.chat.chatNameId])
 
-  let privateChats = props.chat.chat.filter( v => v.privateType)
-    .map( v => (
-      <div key={v._id} onClick={() => props.setChatName(v.name)}>{v.name}</div>
-    ))
+  useEffect( () => {
+    socket.on('receiveChatBack', ({ chatId, name, privateType, users }) => {
+      props.addChat({_id: chatId, name, privateType, users})
+    })
+
+    return () => {
+      socket.off();
+    }
+  }, [props.chat])
+
+  function createGroup(e) {
+    if(e._reactName === 'onClick' || e.key === 'Enter') {
+      socket.emit('createChat', ({ name: groupChatName, privateType: false, users: props.users.actualUser._id }))
+      setGroupChatName('');
+      setCreateButtonVisible(!createButtonVisible);
+    }
+  }
 
   let groupChats = props.chat.chat.filter( v => !v.privateType)
+    .filter( v => v.users.includes(props.users.actualUser._id))
     .map( v => (
-      <div key={v._id} onClick={() => props.setChatName(v.name)}>{v.name}</div>
+      <div key={v._id} onClick={() => props.setChatName(v)}>{v.name}</div>
     ))
+
+  let privateChats = props.chat.chat.filter( v => v.privateType && v.users.includes(props.users.actualUser._id))
+    .reduce( (prev, current) => {
+      if(current.users[0] !== props.users.actualUser._id) {
+          return [...prev, {
+            userId: current.users[0],
+            _id: current._id,
+            name: props.users.users.find( u => u._id === current.users[0]).name,
+            lastName: props.users.users.find( u => u._id === current.users[0]).lastName
+          }];
+        }
+      return [...prev, {
+        userId: current.users[1],
+        _id: current._id,
+        name: props.users.users.find( u => u._id === current.users[1]).name,
+        lastName: props.users.users.find( u => u._id === current.users[1]).lastName
+      }];
+    }, [])
+    .map( v => (
+      <div key={v._id} onClick={ () => props.setChatName(v)}>{v.name} {v.lastName}</div>
+    ));
 
   return (
     <div id='chats'>
       <div>
-        <div>Private</div>
-        {privateChats}
+        <div>
+          <div><b>Private</b></div>
+          {privateChats}
+        </div>
+        <div>
+          <div><b>Group chats</b></div>
+          {groupChats}
+        </div>
       </div>
       <div>
-        <div>Group chats</div>
-        {groupChats}
+        <div className='position-relative position-left-bottom'>
+          <img
+            alt='CREATE_CHAT'
+            src={require('../../imgs/add.png').default}
+            id='create-chat-button'
+            onClick={ () => setCreateButtonVisible(!createButtonVisible)}
+            style={{display: createButtonVisible ? 'block' : 'none'}}
+          />
+          <div style={{display: createButtonVisible ? 'none' : 'block', position: 'relative'}}>
+            <input
+              id='create-chat-input'
+              type='text'
+              onKeyDown={ e => createGroup(e)}
+              value={groupChatName}
+              onChange={ e => setGroupChatName(e.target.value)}
+            />
+            <div>
+              <img
+                alt='send'
+                src={require('../../imgs/send.png').default}
+                style={{width: '30px', position: 'absolute', top: '5px', right: '10px', cursor: 'pointer'}}
+                onClick={e => createGroup(e)}
+              />
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   )
@@ -41,9 +121,9 @@ function Chats(props) {
 
 const mapStateToProps = state => {
   return {
-    users: state.user.users,
+    users: state.user,
     chat: state.chat
   }
 }
 
-export default connect(mapStateToProps, { setChat, setChatName })(Chats);
+export default connect(mapStateToProps, { setChat, setChatName, addChat })(Chats);
