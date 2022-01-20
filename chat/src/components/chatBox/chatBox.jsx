@@ -11,6 +11,11 @@ const socket = io.connect('http://localhost:5000');
 function ChatBox(props) {
   const [message, setMessage] = useState('');
 
+  function scrollDownToBottom() {
+    const div = document.getElementById('chat-field');
+    div.scrollTop = div.scrollHeight;
+  }
+
   useEffect( () => {
     axios.get('http://localhost:5000/messages')
       .then( resp => {
@@ -28,6 +33,7 @@ function ChatBox(props) {
     })
 
     return () => {
+      scrollDownToBottom();
       socket.off();
     }
   }, [props.chat])
@@ -39,23 +45,24 @@ function ChatBox(props) {
     }
   }
 
-  const elements = [];
-  for (const elem of props.chat.messages) {
-    if(elem.userId === props.actualUser._id) {
-      elements.push(<MyMessage message={elem.message} key={elem._id} />);
-    } else {
-      elements.push(<OtherUserMessage message={elem.message} key={elem._id}/>);
-    }
-  }
-  
+  const messages = props.chat.messages.map( elem => {
+    if(elem.userId !== props.actualUser._id) return <OtherUserMessage user={elem.userId} message={elem.message} key={elem._id} />;
+    return <MyMessage user={elem.userId} message={elem.message} key={elem._id} />;
+  })
+
   return (
     <div id='chat-div'>
       <div id='chat-box'>
         <div id='chat-name'>
-          { props.chat.chatNameId === '' ? '' : props.chat.chatNameId.name + ' ' + (props.chat.chatNameId.lastName || '') }
+          <div>
+            { props.chat.chatNameId === '' ? '' : props.chat.chatNameId.name + ' ' + (props.chat.chatNameId.lastName || '') }
+          </div>
+          <div>
+            { props.chat.chatNameId.hasOwnProperty('users') ? 'lista rozwijana' : ''}
+          </div>
         </div>
         <div id='chat-field'>
-          { elements }
+          { messages }
         </div>
       </div>
       <div id='chat-input'>
