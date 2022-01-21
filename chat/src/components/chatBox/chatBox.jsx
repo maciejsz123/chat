@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import './chatBox.sass';
-import MyMessage from '../myMessage/myMessage';
-import OtherUserMessage from '../otherUserMessage/otherUserMessage';
+import MyMessage from '../message/myMessage';
+import OtherUserMessage from '../message/otherUserMessage';
 import { addMessageToChat, setMessages } from '../../redux/actions/chatActions';
 import axios from 'axios';
 import io from 'socket.io-client';

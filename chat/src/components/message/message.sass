@@ -1,0 +1,29 @@
+@import '../../App.sass'
+
+@mixin message-style
+  display: flex
+  padding: 5px
+  margin: 2px
+  border-radius: 10px
+
+.tooltip
+  display: none
+  position: absolute
+  z-index: 2
+  border: 1px solid grey
+  background-color: white
+  border-radius: 10%
+  font-size: 8px
+
+.actual-user-message
+  @include message-style
+  background-color: $actual-user-bg-color
+
+.other-user-message
+  @include message-style
+  background-color: $other-user-bg-color
+
+#message:hover
+  position: relative
+  .tooltip
+    display: block

@@ -25,6 +25,7 @@ function Contacts(props) {
   ))
   return (
     <div id='contacts'>
+      <div>list of users</div>
       {users}
     </div>
   )
