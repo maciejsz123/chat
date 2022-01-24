@@ -9,12 +9,13 @@ function MyMessage(props) {
   const initials = user.name.substring(0,1) + '' + user.lastName.substring(0,1)
 
   return(
-    <div style={{display: 'flex', justifyContent: 'end'}} id='message'>
-      <div className='tooltip tootlip-actual-user'>{user.name + ' ' + user.lastName}</div>
+    <div style={{display: 'flex', justifyContent: 'end'}}>
       <div className='actual-user-message'>
-        {props.message}
+        <span>{props.message}</span>
+        <span className='send-date'>{props.createdAt}</span>
       </div>
-      <div style={avatarStyle}>
+      <div style={avatarStyle} id='avatar'>
+        <div className='tooltip tootlip-actual-user'>{user.name + ' ' + user.lastName}</div>
         {initials}
       </div>
     </div>

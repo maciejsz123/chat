@@ -18,19 +18,22 @@ $div-input-height: 35px
   background-color: $chatbox-bg
   overflow: auto
 
-#chat-name
+#chatbox-name
+  color: $navbar-font-color
   height: $div-input-height
   background-color: $navbar-color
   display: flex
   flex-flow: row nowrap
   justify-content: space-between
+  align-items: center
+  padding: 0 10px
 
 #chat-input
   width: 100%
   height: $div-input-height
   position: relative
   &>input
-    width: calc(100% - 7px)
+    width: calc(90% - 20px)
     height: calc(#{$div-input-height} - 5px)
   &>div
     position: absolute

@@ -9,13 +9,14 @@ function OtherUserMessage(props) {
   const initials = user.name.substring(0,1) + '' + user.lastName.substring(0,1)
 
   return(
-    <div style={{display: 'flex', justifyContent: 'start'}} id='message'>
-      <div className='tooltip'>{user.name + ' ' + user.lastName}</div>
-      <div style={avatarStyle}>
+    <div style={{display: 'flex', justifyContent: 'start'}}>
+      <div style={avatarStyle} id='avatar'>
+        <div className='tooltip tooltip-other-user'>{user.name + ' ' + user.lastName}</div>
         {initials}
       </div>
       <div className='other-user-message'>
-        {props.message}
+        <span>{props.message}</span>
+        <span className='send-date'>{props.createdAt}</span>
       </div>
     </div>
 

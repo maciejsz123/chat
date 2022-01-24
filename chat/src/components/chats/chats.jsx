@@ -51,7 +51,7 @@ function Chats(props) {
   let groupChats = props.chat.chat.filter( v => !v.privateType)
     .filter( v => v.users.includes(props.users.actualUser._id))
     .map( v => (
-      <div key={v._id} onClick={() => props.setChatName(v)}>{v.name}</div>
+      <div key={v._id} className='chat-user-name' onClick={() => props.setChatName(v)}>{v.name}</div>
     ))
 
   let privateChats = props.chat.chat.filter( v => v.privateType && v.users.includes(props.users.actualUser._id))
@@ -72,30 +72,33 @@ function Chats(props) {
       }];
     }, [])
     .map( v => (
-      <div key={v._id} onClick={ () => props.setChatName(v)}>{v.name} {v.lastName}</div>
+      <div key={v._id} className='chat-user-name' onClick={ () => props.setChatName(v)}>{v.name} {v.lastName}</div>
     ));
 
   return (
     <div id='chats'>
       <div>
         <div>
-          <div><b>Private</b></div>
+          <div id='chatbox-name'><b>Private</b></div>
           {privateChats}
         </div>
         <div>
-          <div><b>Group chats</b></div>
+          <div id='chatbox-name'><b>Group chats</b></div>
           {groupChats}
         </div>
       </div>
       <div>
-        <div className='position-relative position-left-bottom'>
-          <img
-            alt='CREATE_CHAT'
-            src={require('../../imgs/add.png').default}
-            id='create-chat-button'
-            onClick={ () => setCreateButtonVisible(!createButtonVisible)}
-            style={{display: createButtonVisible ? 'block' : 'none'}}
-          />
+        <div>
+          <div id='create-chat-div'>
+            <img
+              alt='CREATE_CHAT'
+              src={require('../../imgs/add.png').default}
+              id='create-chat-button'
+              onClick={ () => setCreateButtonVisible(!createButtonVisible)}
+              style={{display: createButtonVisible ? 'block' : 'none'}}
+            />
+            <div className='group-tooltip'>Create new group</div>
+          </div>
           <div style={{display: createButtonVisible ? 'none' : 'block', position: 'relative'}}>
             <input
               id='create-chat-input'

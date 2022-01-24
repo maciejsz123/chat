@@ -8,11 +8,37 @@
   flex-flow: column
   justify-content: space-between
 
+#chat-name
+  height: 35px
+  background-color: $navbar-color
+
 #create-chat-button
   width: 40px
   height: 40px
   cursor: pointer
   padding: 10px
+
+.chat-user-name
+  margin: 4px
+  padding: 2px 10px
+  cursor: pointer
+  &:hover
+    background-color: $chat-name-hover
+
+.group-tooltip
+  position: absolute
+  top: 10px
+  left: 50px
+  display: none
+  font-size: 10px
+  background-color: $chatbox-bg
+
+#create-chat-div
+  position: relative
+  width: 25%
+  &:hover
+    .group-tooltip
+      display: block
 
 #create-chat-input
   width: calc(100% - 17px)

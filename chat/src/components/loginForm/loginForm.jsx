@@ -13,6 +13,13 @@ function LoginForm(props) {
       })
       .then( resp => {
         props.setActualUser(resp.data);
+        return resp.data
+      })
+      .then( data => {
+        axios.post('http://localhost:5000/users/updateOnline', {
+          id: data._id,
+          online: true
+        })
       })
       .then( users => {
         axios.get('http://localhost:5000/users')

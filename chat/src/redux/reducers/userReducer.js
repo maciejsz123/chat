@@ -4,7 +4,14 @@ const initialState = {
   login: 'test',
   password: 'test',
   actualUser: null,
-  users: []
+  users: [{
+    _id: '',
+    name: '',
+    lastName: '',
+    username: '',
+    password: '',
+    online: false
+  }]
 }
 
 export default function reducer(state = initialState, action) {

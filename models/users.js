@@ -29,7 +29,8 @@ const userSchema = new Schema({
     minlength: 3,
     required: true,
     unique: false
-  }
+  },
+  online: Boolean,
 })
 
 const User = mongoose.model('User', userSchema);

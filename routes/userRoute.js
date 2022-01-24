@@ -40,12 +40,26 @@ router.route('/register').post(urlencodedParser, (req, res) => {
     const lastName = req.body.lastName;
     const username = req.body.username;
     const password = hash;
+    const online = false;
 
-    const newUser = new User({ name, lastName, username, password });
-    
+    const newUser = new User({ name, lastName, username, password, online });
+
     newUser.save()
       .then( () => res.json('User added'))
       .catch( err => res.send(err))
+  })
+})
+
+router.route('/updateOnline').post(urlencodedParser, (req, res) => {
+  const id = req.body.id;
+  const online = req.body.online;
+  console.log(req.body);
+  User.findByIdAndUpdate(id, {online}, (err, data) => {
+    if(err) {
+      console.log(err);
+    } else {
+      console.log(data);
+    }
   })
 })
 

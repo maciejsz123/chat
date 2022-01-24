@@ -21,11 +21,11 @@ function Contacts(props) {
 
   let users = props.users.users.filter( u => u._id !== props.users.actualUser._id)
     .map( (user, i) => (
-    <div key={user._id} onClick={() => createPrivateChat(user)}>{user.name} {user.lastName}</div>
+    <div key={user._id} className='chat-user-name' onClick={() => createPrivateChat(user)}>{user.name} {user.lastName}</div>
   ))
   return (
     <div id='contacts'>
-      <div>list of users</div>
+      <div id='chatbox-name'><b>list of users</b></div>
       {users}
     </div>
   )
