@@ -3,6 +3,7 @@ import './chats.sass';
 import { connect } from 'react-redux';
 import axios from 'axios';
 import { setChat, setChatName, addChat } from '../../redux/actions/chatActions';
+import { setActualUser, updateUsers } from '../../redux/actions/userActions';
 import io from 'socket.io-client';
 const socket = io.connect('http://localhost:5000');
 
@@ -18,6 +19,21 @@ function Chats(props) {
         setCreateButtonVisible(true);
       }
     })
+    window.onbeforeunload = function() {//logout user
+      if(props.users.actualUser) {
+        axios.post('http://localhost:5000/users/updateOnline', {
+          id: props.users.actualUser._id,
+          online: false
+        })
+        .then( res => {
+          console.log(res.data);
+          props.setActualUser(null);
+        })
+        .catch(err => {
+          console.log(err);
+        })
+      }
+    }
   }, [])
 
   useEffect( () => {
@@ -40,6 +56,16 @@ function Chats(props) {
     }
   }, [props.chat])
 
+  useEffect( () => {
+    socket.on('receiveOnlineUsersBack', ({data}) => {
+      console.log(data);
+      props.updateUsers({ _id: data.userId, online: data.online })
+    })
+    return () => {
+      socket.off();
+    }
+  }, [props.users])
+
   function createGroup(e) {
     if(e._reactName === 'onClick' || e.key === 'Enter') {
       socket.emit('createChat', ({ name: groupChatName, privateType: false, users: props.users.actualUser._id }))
@@ -61,18 +87,27 @@ function Chats(props) {
             userId: current.users[0],
             _id: current._id,
             name: props.users.users.find( u => u._id === current.users[0]).name,
-            lastName: props.users.users.find( u => u._id === current.users[0]).lastName
+            lastName: props.users.users.find( u => u._id === current.users[0]).lastName,
+            online: props.users.users.find( u => u._id === current.users[0]).online
           }];
         }
       return [...prev, {
         userId: current.users[1],
         _id: current._id,
         name: props.users.users.find( u => u._id === current.users[1]).name,
-        lastName: props.users.users.find( u => u._id === current.users[1]).lastName
+        lastName: props.users.users.find( u => u._id === current.users[1]).lastName,
+        online: props.users.users.find( u => u._id === current.users[1]).online
       }];
     }, [])
     .map( v => (
-      <div key={v._id} className='chat-user-name' onClick={ () => props.setChatName(v)}>{v.name} {v.lastName}</div>
+      <div key={v._id} className='chat-user-name' onClick={ () => props.setChatName(v)}>
+        <div>
+          {v.online ? <div className='online-dot'></div> : <div className='offline-dot'></div>}
+        </div>
+        <div>
+          {v.name} {v.lastName}
+        </div>
+      </div>
     ));
 
   return (
@@ -129,4 +164,4 @@ const mapStateToProps = state => {
   }
 }
 
-export default connect(mapStateToProps, { setChat, setChatName, addChat })(Chats);
+export default connect(mapStateToProps, { setChat, setChatName, addChat, setActualUser, updateUsers })(Chats);

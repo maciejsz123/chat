@@ -2,7 +2,9 @@ import React from 'react';
 import './loginForm.sass';
 import { connect } from 'react-redux';
 import { setLogin, setPassword, setActualUser, setUsers } from '../../redux/actions/userActions';
+import io from 'socket.io-client';
 const axios = require('axios');
+const socket = io.connect('http://localhost:5000');
 
 function LoginForm(props) {
   function sendData(e) {
@@ -16,10 +18,7 @@ function LoginForm(props) {
         return resp.data
       })
       .then( data => {
-        axios.post('http://localhost:5000/users/updateOnline', {
-          id: data._id,
-          online: true
-        })
+        socket.emit('sendOnlineUser', ({ _id: data._id, online:true }))
       })
       .then( users => {
         axios.get('http://localhost:5000/users')

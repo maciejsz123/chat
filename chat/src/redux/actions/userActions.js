@@ -1,4 +1,4 @@
-import { SET_LOGIN, SET_PASSWORD, SET_ACTUAL_USER, SET_USERS } from './types';
+import { SET_LOGIN, SET_PASSWORD, SET_ACTUAL_USER, SET_USERS, UPDATE_USERS } from './types';
 
 export const setLogin = (value) => dispatch => {
   dispatch({
@@ -24,6 +24,13 @@ export const setActualUser = value => dispatch => {
 export const setUsers = value => dispatch => {
   dispatch({
     type: SET_USERS,
+    payload: value
+  })
+}
+
+export const updateUsers = value => dispatch => {
+  dispatch({
+    type: UPDATE_USERS,
     payload: value
   })
 }

@@ -1,6 +1,7 @@
 const User = require('../models/users');
 const router = require('express').Router();
 const urlencodedParser = require('./urlEncoded');//to post requests
+const { io } = require('../index.js');
 
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
@@ -50,17 +51,24 @@ router.route('/register').post(urlencodedParser, (req, res) => {
   })
 })
 
-router.route('/updateOnline').post(urlencodedParser, (req, res) => {
-  const id = req.body.id;
-  const online = req.body.online;
-  console.log(req.body);
-  User.findByIdAndUpdate(id, {online}, (err, data) => {
-    if(err) {
-      console.log(err);
-    } else {
-      console.log(data);
+io.on('connection', socket => {
+  socket.on('sendOnlineUser', ({ _id, online }) => {
+    try {
+      User.findByIdAndUpdate(_id, {online}, (err, data) => {
+        if(err) {
+          console.log(err);
+        } else {
+          io.emit('receiveOnlineUsersBack', { data })
+        }
+      })
+    } catch(err) {
+      throw(err);
     }
   })
-})
+
+  socket.on('disconnect', () => {
+    console.log('disconnected');
+  })
+});
 
 module.exports = router;
