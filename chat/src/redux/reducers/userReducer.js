@@ -36,11 +36,13 @@ export default function reducer(state = initialState, action) {
         ...state,
         users: action.payload
       }
-    /*case UPDATE_USERS:
+    case UPDATE_USERS:
+      const newUserArray = state.users.filter( user => user._id !== action.payload._id);
+
       return {
         ...state,
-        users: action.payload
-      }*/
+        users: [...newUserArray, action.payload]
+      }
     default:
       return state
   }

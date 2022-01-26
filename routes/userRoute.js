@@ -52,13 +52,16 @@ router.route('/register').post(urlencodedParser, (req, res) => {
 })
 
 io.on('connection', socket => {
-  socket.on('sendOnlineUser', ({ _id, online }) => {
+  let id = null;
+  socket.on('sendUserStatus', ({ _id, online }) => {
+    id = _id;
+    console.log(_id, online);
     try {
-      User.findByIdAndUpdate(_id, {online}, (err, data) => {
+      User.findByIdAndUpdate(_id, {online}, {new: true}, (err, data) => {
         if(err) {
           console.log(err);
         } else {
-          io.emit('receiveOnlineUsersBack', { data })
+          io.emit('receiveUsersStatusBack', { data })
         }
       })
     } catch(err) {
@@ -67,7 +70,14 @@ io.on('connection', socket => {
   })
 
   socket.on('disconnect', () => {
-    console.log('disconnected');
+    User.findByIdAndUpdate(id, {online: false}, {new: true}, (err, data) => {
+      if(err) {
+        console.log(err);
+      } else {
+        io.emit('receiveUsersStatusBack', { data })
+      }
+    })
+    console.log(id, 'user disconnected');
   })
 });
 

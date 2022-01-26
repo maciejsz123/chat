@@ -19,21 +19,6 @@ function Chats(props) {
         setCreateButtonVisible(true);
       }
     })
-    window.onbeforeunload = function() {//logout user
-      if(props.users.actualUser) {
-        axios.post('http://localhost:5000/users/updateOnline', {
-          id: props.users.actualUser._id,
-          online: false
-        })
-        .then( res => {
-          console.log(res.data);
-          props.setActualUser(null);
-        })
-        .catch(err => {
-          console.log(err);
-        })
-      }
-    }
   }, [])
 
   useEffect( () => {
@@ -57,9 +42,9 @@ function Chats(props) {
   }, [props.chat])
 
   useEffect( () => {
-    socket.on('receiveOnlineUsersBack', ({data}) => {
+    socket.on('receiveUsersStatusBack', ({data}) => {
       console.log(data);
-      props.updateUsers({ _id: data.userId, online: data.online })
+      props.updateUsers(data)
     })
     return () => {
       socket.off();

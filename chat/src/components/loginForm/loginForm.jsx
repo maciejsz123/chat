@@ -17,17 +17,18 @@ function LoginForm(props) {
         props.setActualUser(resp.data);
         return resp.data
       })
-      .then( data => {
-        socket.emit('sendOnlineUser', ({ _id: data._id, online:true }))
-      })
       .then( users => {
         axios.get('http://localhost:5000/users')
         .then( users => {
           props.setUsers(users.data)
         })
+        return users
+      })
+      .then( data => {
+        socket.emit('sendUserStatus', ({ _id: data._id, online:true }))
       })
       .catch( err => {
-        console.log(err.data);
+        console.log(err);
       })
   }
 
