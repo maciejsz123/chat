@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import { setLogin, setPassword, setActualUser, setUsers } from '../../redux/actions/userActions';
 import io from 'socket.io-client';
 const axios = require('axios');
-const socket = io.connect('http://localhost:5000');
 
 function LoginForm(props) {
   function sendData(e) {
@@ -23,9 +22,6 @@ function LoginForm(props) {
           props.setUsers(users.data)
         })
         return users
-      })
-      .then( data => {
-        socket.emit('sendUserStatus', ({ _id: data._id, online:true }))
       })
       .catch( err => {
         console.log(err);

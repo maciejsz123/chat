@@ -14,6 +14,12 @@ router.route('/').get( (req, res) => {
     .catch( err => res.status(400).json('Error: ' + err))
 })
 
+router.route('/:id').delete( (req,res) => {
+  User.findByIdAndDelete(req.params.id)
+    .then( chat => res.json(`deleted`))
+    .catch( err => res.status(400).json('Error' + err))
+})
+
 router.route('/login').post(urlencodedParser, (req, res) => {
   User.findOne({'username': req.body.username})
     .then( user => {
@@ -51,33 +57,17 @@ router.route('/register').post(urlencodedParser, (req, res) => {
   })
 })
 
+let usersOnline = {};
 io.on('connection', socket => {
-  let id = null;
-  socket.on('sendUserStatus', ({ _id, online }) => {
-    id = _id;
-    console.log(_id, online);
-    try {
-      User.findByIdAndUpdate(_id, {online}, {new: true}, (err, data) => {
-        if(err) {
-          console.log(err);
-        } else {
-          io.emit('receiveUsersStatusBack', { data })
-        }
-      })
-    } catch(err) {
-      throw(err);
-    }
+
+  socket.on('sendUserStatus', ( id ) => {
+    usersOnline[socket.id] = id;
+    io.emit('receiveUsersStatusBack', { usersOnline });
   })
 
   socket.on('disconnect', () => {
-    User.findByIdAndUpdate(id, {online: false}, {new: true}, (err, data) => {
-      if(err) {
-        console.log(err);
-      } else {
-        io.emit('receiveUsersStatusBack', { data })
-      }
-    })
-    console.log(id, 'user disconnected');
+    delete usersOnline[socket.id];
+    io.emit('receiveUsersStatusBack', { usersOnline });
   })
 });
 

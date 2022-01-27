@@ -9,9 +9,9 @@ const initialState = {
     name: '',
     lastName: '',
     username: '',
-    password: '',
-    online: false
-  }]
+    password: ''
+  }],
+  usersOnline: []
 }
 
 export default function reducer(state = initialState, action) {
@@ -37,11 +37,15 @@ export default function reducer(state = initialState, action) {
         users: action.payload
       }
     case UPDATE_USERS:
-      const newUserArray = state.users.filter( user => user._id !== action.payload._id);
+      const usersOnlineArray = Object.keys(action.payload.usersOnline).map( key => action.payload.usersOnline[key])
+        .reduce( (acc, current) => {
+          if(acc.includes(current)) return acc;
+          return [...acc, current]
+        }, [])
 
       return {
         ...state,
-        users: [...newUserArray, action.payload]
+        usersOnline: usersOnlineArray
       }
     default:
       return state

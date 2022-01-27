@@ -42,14 +42,17 @@ function Chats(props) {
   }, [props.chat])
 
   useEffect( () => {
-    socket.on('receiveUsersStatusBack', ({data}) => {
-      console.log(data);
-      props.updateUsers(data)
+    socket.on('receiveUsersStatusBack', (id) => {
+      props.updateUsers(id)
     })
     return () => {
       socket.off();
     }
-  }, [props.users])
+  })
+
+  useEffect( () => {
+    socket.emit('sendUserStatus', (props.users.actualUser._id));
+  }, [])
 
   function createGroup(e) {
     if(e._reactName === 'onClick' || e.key === 'Enter') {
@@ -73,7 +76,7 @@ function Chats(props) {
             _id: current._id,
             name: props.users.users.find( u => u._id === current.users[0]).name,
             lastName: props.users.users.find( u => u._id === current.users[0]).lastName,
-            online: props.users.users.find( u => u._id === current.users[0]).online
+            online: props.users.usersOnline.includes(current.users[0])
           }];
         }
       return [...prev, {
@@ -81,7 +84,7 @@ function Chats(props) {
         _id: current._id,
         name: props.users.users.find( u => u._id === current.users[1]).name,
         lastName: props.users.users.find( u => u._id === current.users[1]).lastName,
-        online: props.users.users.find( u => u._id === current.users[1]).online
+        online: props.users.usersOnline.includes(current.users[1])
       }];
     }, [])
     .map( v => (
