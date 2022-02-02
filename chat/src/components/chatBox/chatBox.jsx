@@ -85,9 +85,6 @@ function ChatBox(props) {
           <div>
             { props.chat.chatNameId === '' ? '' : props.chat.chatNameId.name + ' ' + (props.chat.chatNameId.lastName || '') }
           </div>
-          <div>
-            { props.chat.chatNameId.hasOwnProperty('users') ? 'lista rozwijana' : ''}
-          </div>
         </div>
         <div id='chat-field'>
           { messages }

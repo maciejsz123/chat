@@ -14,11 +14,13 @@ const chatReducer = (state = initialState, action) => {
         chat: action.payload
       }
     case SET_CHAT_NAME:
-      return{
+      return {
         ...state,
         chatNameId: action.payload
       }
     case ADD_MESSAGE_TO_CHAT:
+      if(state.chatNameId._id !== action.payload.chatId) return state
+
       return {
         ...state,
         messages: [...state.messages, action.payload]

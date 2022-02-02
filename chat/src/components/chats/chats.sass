@@ -54,6 +54,33 @@
     .group-tooltip
       display: block
 
+.arrow
+  border: solid black
+  border-width: 0 2px 2px 0
+  padding: 3px
+  margin: 3px
+  transform: rotate(-45deg)
+  margin: 3px
+  width: 3px
+  height: 2px
+  transition: transform 0.3s
+
+.arrow-active
+  transform: rotate(45deg)
+
+.group-users
+  display: none
+  max-height: 100px
+  transition: height 1s
+
+.group-display-users
+  display: inline-block
+  max-height: 0px
+  transition: height 1s
+
+
+
+
 #create-chat-input
   width: calc(100% - 17px)
   height: 30px
