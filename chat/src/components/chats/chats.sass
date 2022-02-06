@@ -57,7 +57,7 @@
 .arrow
   border: solid black
   border-width: 0 2px 2px 0
-  padding: 3px
+  padding: 4px
   margin: 3px
   transform: rotate(-45deg)
   margin: 3px
@@ -69,17 +69,13 @@
   transform: rotate(45deg)
 
 .group-users
-  display: none
-  max-height: 100px
-  transition: height 1s
+  max-height: 0px
+  transition: max-height 0.3s ease-out
+  overflow: hidden
 
 .group-display-users
-  display: inline-block
-  max-height: 0px
-  transition: height 1s
-
-
-
+  max-height: 300px
+  transition: max-height 0.9s ease-out
 
 #create-chat-input
   width: calc(100% - 17px)

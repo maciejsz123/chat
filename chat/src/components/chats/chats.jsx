@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import './chats.sass';
-import AddUserModal from '../addUserModal/addUserModal';
 import { connect } from 'react-redux';
 import axios from 'axios';
-import { setChat, setChatName, addChat } from '../../redux/actions/chatActions';
+import { setChat, addChat } from '../../redux/actions/chatActions';
 import { setActualUser, updateUsers } from '../../redux/actions/userActions';
+import GroupChat from './groupChat';
+import PrivateChat from './privateChat';
 import io from 'socket.io-client';
 const socket = io.connect('http://localhost:5000');
 
@@ -13,13 +14,17 @@ function Chats(props) {
   const [groupChatName, setGroupChatName] = useState('');
 
   useEffect( () => {
-    document.addEventListener( 'click', v => {
+    function buttonVisibility(v) {
       if(v.target.id === 'create-chat-button' || v.target.id === 'create-chat-input') {
 
       } else if(v.target.id !== 'create-chat-button') {
         setCreateButtonVisible(true);
       }
-    })
+    }
+    document.addEventListener('click', buttonVisibility);
+    return () => {
+      document.removeEventListener('click', buttonVisibility);
+    }
   }, [])
 
   useEffect( () => {
@@ -63,78 +68,16 @@ function Chats(props) {
     }
   }
 
-  function displayUserList(e, id) {
-    const elem = document.getElementById(id);
-    if(e.target.classList.contains('arrow-active')) {
-      e.target.classList.remove('arrow-active')
-      elem.classList.remove('group-display-users')
-    } else {
-      e.target.classList.add('arrow-active');
-      elem.classList.add('group-display-users')
-    }
-  }
-
-  let groupChats = props.chat.chat.filter( v => !v.privateType)
-    .filter( v => v.users.includes(props.users.actualUser._id))
-    .map( v => (
-      <div key={v._id} className='chat-user-name' onClick={() => props.setChatName(v)}>
-        <div style={{display: 'flex'}}>
-          <div className='arrow' onClick={ (e) => displayUserList(e, v._id.concat('-user-list'))}></div>
-          <div>{v.name}</div>
-          <AddUserModal chatId={v._id} />
-        </div>
-        <div id={v._id.concat('-user-list')} className='group-users'>
-          <ul>
-            {v.users.map( userId => (
-              <li key={userId}>
-                {props.users.users.filter( user => user._id === userId).map( user => user.name + " " + user.lastName)}
-              </li>
-            ))}
-          </ul>
-        </div>
-      </div>
-    ))
-
-  let privateChats = props.chat.chat.filter( v => v.privateType && v.users.includes(props.users.actualUser._id))
-    .reduce( (prev, current) => {
-      if(current.users[0] !== props.users.actualUser._id) {
-          return [...prev, {
-            userId: current.users[0],
-            _id: current._id,
-            name: props.users.users.find( u => u._id === current.users[0]).name,
-            lastName: props.users.users.find( u => u._id === current.users[0]).lastName,
-            online: props.users.usersOnline.includes(current.users[0])
-          }];
-        }
-      return [...prev, {
-        userId: current.users[1],
-        _id: current._id,
-        name: props.users.users.find( u => u._id === current.users[1]).name,
-        lastName: props.users.users.find( u => u._id === current.users[1]).lastName,
-        online: props.users.usersOnline.includes(current.users[1])
-      }];
-    }, [])
-    .map( v => (
-      <div key={v._id} className='chat-user-name' onClick={ () => props.setChatName(v)}>
-        <div>
-          {v.online ? <div className='online-dot'></div> : <div className='offline-dot'></div>}
-        </div>
-        <div>
-          {v.name} {v.lastName}
-        </div>
-      </div>
-    ));
-
   return (
     <div id='chats'>
       <div>
         <div>
           <div id='chatbox-name'><b>Private</b></div>
-          {privateChats}
+          <PrivateChat />
         </div>
         <div>
           <div id='chatbox-name'><b>Group chats</b></div>
-          {groupChats}
+          <GroupChat />
         </div>
       </div>
       <div>
@@ -179,4 +122,4 @@ const mapStateToProps = state => {
   }
 }
 
-export default connect(mapStateToProps, { setChat, setChatName, addChat, setActualUser, updateUsers })(Chats);
+export default connect(mapStateToProps, { setChat, addChat, setActualUser, updateUsers })(Chats);

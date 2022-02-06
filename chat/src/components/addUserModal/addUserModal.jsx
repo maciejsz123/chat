@@ -3,14 +3,18 @@ import { connect } from 'react-redux';
 import './addUserModal.sass';
 
 function AddUserModal(props) {
-  const [name, setName] = useState('');
+  const [filterName, setFilterName] = useState('');
 
   useEffect( () => {
-    window.addEventListener( 'click', (e) => {
+    function hideModalListener(e) {
       if(e.target.className === 'modal') {
         hideModal(props.chatId)
       }
-    })
+    }
+    document.addEventListener( 'click', hideModalListener);
+    return () => {
+      document.removeEventListener('click', hideModalListener);
+    }
   }, [])
 
   function displayModal(e, id) {
@@ -23,19 +27,33 @@ function AddUserModal(props) {
     elem.style.display = 'none';
   }
 
+  function addUserToGroup(userId) {
+    console.log(userId);
+  }
+
   return (
     <div>
       <div onClick={ (e) => displayModal(e, props.chatId)}>
-        <span>Add user</span>
+        <img src={require('../../imgs/add-user.png').default} alt='add-user' style={{width: '20px'}}/>
       </div>
       <div className='modal' id={`${props.chatId}chat`}>
         <div className='modal-window'>
-          <div onClick={ ()=> hideModal(props.chatId)}>close</div>
-          <input value={name} onChange={ e => setName(e.target.value)} placeholder='search user'/>
-          <div>
-            list of names
+          <div className='close-button' onClick={ ()=> hideModal(props.chatId)}>
+            <img alt='close' src={require('../../imgs/close-button.png').default} style={{width: '25px'}}/>
           </div>
-          <button type='button'>add</button>
+          <input value={filterName} onChange={ e => setFilterName(e.target.value)} placeholder='search user'/>
+          <div>
+            {
+              props.users.users.filter( user => user.name.toLowerCase().includes(filterName.toLowerCase()) || user.lastName.toLowerCase().includes(filterName.toLowerCase()))
+                .filter( (user, i) => i<15)
+                .map( user => (
+                  <div className='user-list-item' key={user._id}>
+                    <span>{user.name + " " + user.lastName}</span>
+                    <img className='add-user-icon' alt='add_user' src={require('../../imgs/add-user.png').default} onClick={ () => addUserToGroup(user._id)} />
+                  </div>
+                ))
+            }
+          </div>
         </div>
       </div>
     </div>
