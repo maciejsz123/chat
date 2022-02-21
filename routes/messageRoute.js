@@ -28,7 +28,7 @@ router.route('/:id').delete( (req,res) => {
     .catch( err => res.send(err))
 })*/
 
-function messageSocket({ userId, chatId, message }) {
+const messageSocket = ({ userId, chatId, message }) => {
   try {
     const newMessage = new Message({ userId, chatId, message});
     newMessage.save()
@@ -43,5 +43,7 @@ function messageSocket({ userId, chatId, message }) {
   }
 }
 
-module.exports = router;
-exports.messageSocket = messageSocket;
+module.exports = {
+  messageRouter: router,
+  messageSocket: messageSocket
+}

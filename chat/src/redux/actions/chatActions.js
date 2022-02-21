@@ -37,8 +37,8 @@ export const getMessages = (chatId) => async dispatch => {
   dispatch(getMessagesRequest());
   try {
     const resp = await axios.get('http://localhost:5000/messages');
-    const filteredResp = resp.data.filter( message => message.chatId === chatId)
-    dispatch(getMessagesSuccess(filteredResp.data));
+    const filteredResp = resp.data.filter( message => message.chatId === chatId);
+    dispatch(getMessagesSuccess(filteredResp));
   } catch(err) {
     dispatch(getMessagesError(err));
   }

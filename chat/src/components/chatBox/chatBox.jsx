@@ -68,11 +68,14 @@ function ChatBox(props) {
     }
   }
 
-  const messages = props.chat.messages.map( elem => {
-    if(elem.userId !== props.actualUser._id) return <OtherUserMessage user={elem.userId} createdAt={formatedCreatedAt(elem.createdAt)} message={elem.message} key={elem._id} />;
-    return <MyMessage user={elem.userId} createdAt={formatedCreatedAt(elem.createdAt)} message={elem.message} key={elem._id} />;
-  })
-
+  let messages = [];
+  if(!props.chat.messagesLoading) {
+    messages = props.chat.messages.map( elem => {
+      if(elem.userId !== props.actualUser._id) return <OtherUserMessage user={elem.userId} createdAt={formatedCreatedAt(elem.createdAt)} message={elem.message} key={elem._id} />;
+      return <MyMessage user={elem.userId} createdAt={formatedCreatedAt(elem.createdAt)} message={elem.message} key={elem._id} />;
+    })
+  }
+  
   return (
     <div id='chat-div'>
       <div id='chat-box'>

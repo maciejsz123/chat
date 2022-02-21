@@ -1,7 +1,6 @@
 const User = require('../models/users');
 const router = require('express').Router();
 const urlencodedParser = require('./urlEncoded');//to post requests
-const { io } = require('../index.js');
 
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
@@ -57,4 +56,6 @@ router.route('/register').post(urlencodedParser, (req, res) => {
   })
 })
 
-module.exports = router;
+module.exports = {
+  userRouter: router
+}

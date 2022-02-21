@@ -1,6 +1,7 @@
 const Chat = require('../models/chat');
 const router = require('express').Router();
 const urlencodedParser = require('./urlEncoded');//to post requests
+const { io } = require('../index.js');
 
 router.route('/').get( (req, res) => {
   Chat.find()
@@ -32,7 +33,7 @@ function createChatSocket({ name, privateType, users }) {
 function updateGroupChatSocket({ chatId, userId }) {
   try {
     Chat.findOne({_id: chatId}, (err, obj) => {
-      Chat.findByIdAndUpdate(obj._id, {'users': [...obj.users, userId]})
+      Chat.findByIdAndUpdate(obj._id, {'users': [...obj.users, userId]}, {new: true})
       .then( data => {
         io.emit('receiveUpdatedChatBack', { chatId: data._id, name: data.name, privateType: data.privateType, users: data.users })
       })
@@ -42,6 +43,8 @@ function updateGroupChatSocket({ chatId, userId }) {
   }
 }
 
-module.exports = router;
-exports.updateGroupChatSocket = updateGroupChatSocket;
-exports.createChatSocket = createChatSocket;
+module.exports = {
+  chatRouter: router,
+  createChatSocket,
+  updateGroupChatSocket
+}

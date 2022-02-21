@@ -38,7 +38,7 @@ function Chats(props) {
     return () => {
       socket.off();
     }
-  }, [props.chat.chat])
+  })
 
   useEffect( () => {
     socket.on('receiveUsersStatusBack', (id) => {
@@ -60,7 +60,7 @@ function Chats(props) {
       setCreateButtonVisible(!createButtonVisible);
     }
   }
-  console.log(props.chat.chat);
+
   return (
     <div id='chats'>
       <div>

@@ -7,14 +7,10 @@ const socket = io.connect('http://localhost:5000');
 
 function AddUserModal(props) {
   const [filterName, setFilterName] = useState('');
-  const [listOfChatUsers, setListOfChatUsers] = useState([]);
 
-  useEffect( () => {
-    const list = props.chat.chat.filter( chat => chat._id === props.chatId)
-      .map(chat => chat.users)
-      .flat();
-    setListOfChatUsers(list)
-  }, [props.chat])
+  const listOfChatUsers = props.chat.chat.filter( chat => chat._id === props.chatId)
+    .map(chat => chat.users)
+    .flat();
 
   useEffect( () => {
     function hideModalListener(e) {
@@ -46,8 +42,8 @@ function AddUserModal(props) {
     return () => {
       socket.off();
     }
-  }, [props.chat.chat])
-
+  })
+  
   function addUserToGroup(userId, chatId) {
     socket.emit('updateGroupChat', {chatId, userId})
   }

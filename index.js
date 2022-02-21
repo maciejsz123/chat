@@ -16,15 +16,17 @@ const io = require('socket.io')(http, {
   }
 });
 
+exports.io = io;
+
 const { createChatSocket, updateGroupChatSocket } = require('./routes/chatRoute');
 const { messageSocket } = require('./routes/messageRoute');
 
 let usersOnline = {};
 
 io.on('connection', socket => {
-  socket.on('createChat', createChatSocket({ name, privateType, users }));
-  socket.on('updateGroupChat', updateGroupChatSocket({ chatId, userId });
-  socket.on('message', messageSocket({ userId, chatId, message }));
+  socket.on('createChat', ({ name, privateType, users }) => createChatSocket({ name, privateType, users }));
+  socket.on('updateGroupChat', ({ chatId, userId }) => updateGroupChatSocket({ chatId, userId }));
+  socket.on('message', ({userId, chatId, message}) => messageSocket({ userId, chatId, message }));
 
   socket.on('sendUserStatus', ( id ) => {
     usersOnline[socket.id] = id;
@@ -44,9 +46,9 @@ http.listen(PORT, () => {
   console.log('listening on:' + PORT);
 });
 
-const userRouter = require('./routes/userRoute');
-const messageRouter = require('./routes/messageRoute');
-const chatRouter = require('./routes/chatRoute');
+const { userRouter } = require('./routes/userRoute');
+const { messageRouter } = require('./routes/messageRoute');
+const { chatRouter } = require('./routes/chatRoute');
 
 app.use('/users', userRouter);
 app.use('/messages', messageRouter);

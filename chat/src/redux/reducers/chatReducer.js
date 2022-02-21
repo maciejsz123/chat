@@ -66,7 +66,6 @@ const chatReducer = (state = initialState, action) => {
         chat: [...state.chat, action.payload]
       }
     case UPDATE_CHAT:
-    console.log(action.payload);
       return {
         ...state,
         chat: state.chat.reduce( (accumulator, chat) => {
