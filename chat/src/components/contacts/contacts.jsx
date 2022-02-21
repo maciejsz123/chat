@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './contacts.sass';
 import { connect } from 'react-redux';
 import { addChat, setChatName } from '../../redux/actions/chatActions';
@@ -18,6 +18,20 @@ function Contacts(props) {
       props.setChatName({ _id: check[0]._id, userId: user._id, name: user.name, lastName: user.lastName})
     }
   }
+
+  useEffect( () => {
+    socket.on('receiveChatBack', ({ chatId, name, privateType, users }) => {
+      if(privateType) {
+        const userData = props.users.users.filter( user => user._id !== props.users.actualUser._id && users.flat().includes(user._id))
+          .flat();
+        props.setChatName({ _id: chatId, userId: userData[0]._id, name: userData[0].name, lastName: userData[0].lastName})
+      }
+    })
+
+    return () => {
+      socket.off();
+    }
+  })
 
   let users = props.users.users.filter( u => u._id !== props.users.actualUser._id)
     .map( (user, i) => (

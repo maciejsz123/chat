@@ -32,7 +32,9 @@ function Chats(props) {
 
   useEffect( () => {
     socket.on('receiveChatBack', ({ chatId, name, privateType, users }) => {
-      props.addChat({_id: chatId, name, privateType, users})
+      if(!privateType) {
+        props.addChat({_id: chatId, name, privateType, users})
+      }
     })
 
     return () => {
