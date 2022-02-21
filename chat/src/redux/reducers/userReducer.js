@@ -1,16 +1,14 @@
-import { SET_LOGIN, SET_PASSWORD, SET_ACTUAL_USER, SET_USERS, UPDATE_USERS } from '../actions/types';
+import { SET_LOGIN, SET_PASSWORD, SET_ACTUAL_USER,
+  GET_USERS_REQUEST, GET_USERS_SUCCESS, GET_USERS_ERROR,
+  UPDATE_USERS } from '../actions/types';
 
 const initialState = {
   login: 'test',
   password: 'test',
   actualUser: null,
-  users: [{
-    _id: '',
-    name: '',
-    lastName: '',
-    username: '',
-    password: ''
-  }],
+  users: [],
+  loading: false,
+  error: null,
   usersOnline: []
 }
 
@@ -31,10 +29,22 @@ export default function reducer(state = initialState, action) {
         ...state,
         actualUser: action.payload
       }
-    case SET_USERS:
+    case GET_USERS_REQUEST:
       return {
         ...state,
+        loading: true
+      }
+    case GET_USERS_SUCCESS:
+      return {
+        ...state,
+        loading: false,
         users: action.payload
+      }
+    case GET_USERS_ERROR:
+      return {
+        ...state,
+        loading: false,
+        error: action.payload
       }
     case UPDATE_USERS:
       const usersOnlineArray = Object.keys(action.payload.usersOnline).map( key => action.payload.usersOnline[key])

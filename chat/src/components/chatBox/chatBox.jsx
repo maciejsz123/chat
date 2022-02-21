@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import './chatBox.sass';
 import MyMessage from '../message/myMessage';
 import OtherUserMessage from '../message/otherUserMessage';
-import { addMessageToChat, setMessages } from '../../redux/actions/chatActions';
+import { addMessageToChat, getMessages } from '../../redux/actions/chatActions';
 import axios from 'axios';
 import io from 'socket.io-client';
 const socket = io.connect('http://localhost:5000');
@@ -17,16 +17,12 @@ function ChatBox(props) {
   }
 
   useEffect( () => {
-    axios.get('http://localhost:5000/messages')
-      .then( resp => {
-        let elements = resp.data.filter( v => v.chatId === props.chat.chatNameId._id);
-        props.setMessages(elements)
-        scrollDownToBottom();
-      })
-      .catch( err => {
-        console.log(err);
-      })
+    props.getMessages(props.chat.chatNameId._id);
   }, [props.chat.chatNameId])
+
+  useEffect( () => {
+    scrollDownToBottom();
+  }, [props.chat.messages])
 
   useEffect( () => {
     socket.on('receiveMessageBack', ({ messageId, userId, chatId, message }) => {
@@ -108,4 +104,4 @@ const mapStateToProps = state => {
   }
 }
 
-export default connect(mapStateToProps, { addMessageToChat, setMessages })(ChatBox);
+export default connect(mapStateToProps, { addMessageToChat, getMessages })(ChatBox);

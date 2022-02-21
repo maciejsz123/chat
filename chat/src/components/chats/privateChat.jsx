@@ -3,6 +3,7 @@ import './chats.sass';
 import { connect } from 'react-redux';
 import { setChatName } from '../../redux/actions/chatActions';
 function PrivateChat(props) {
+  if(!props.users.users[0]._id) return <div></div>;
 
   const privateChats = props.chat.chat.filter( v => v.privateType && v.users.includes(props.users.actualUser._id))
     .reduce( (prev, current) => {

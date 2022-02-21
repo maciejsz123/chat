@@ -16,7 +16,26 @@ const io = require('socket.io')(http, {
   }
 });
 
-exports.io = io;
+const { createChatSocket, updateGroupChatSocket } = require('./routes/chatRoute');
+const { messageSocket } = require('./routes/messageRoute');
+
+let usersOnline = {};
+
+io.on('connection', socket => {
+  socket.on('createChat', createChatSocket({ name, privateType, users }));
+  socket.on('updateGroupChat', updateGroupChatSocket({ chatId, userId });
+  socket.on('message', messageSocket({ userId, chatId, message }));
+
+  socket.on('sendUserStatus', ( id ) => {
+    usersOnline[socket.id] = id;
+    io.emit('receiveUsersStatusBack', { usersOnline });
+  })
+
+  socket.on('disconnect', () => {
+    delete usersOnline[socket.id];
+    io.emit('receiveUsersStatusBack', { usersOnline });
+  })
+});
 
 app.use(cors());
 app.use(express.json());
@@ -27,7 +46,7 @@ http.listen(PORT, () => {
 
 const userRouter = require('./routes/userRoute');
 const messageRouter = require('./routes/messageRoute');
-const chatRouter = require('./routes/chatRouter');
+const chatRouter = require('./routes/chatRoute');
 
 app.use('/users', userRouter);
 app.use('/messages', messageRouter);

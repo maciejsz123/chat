@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import './chats.sass';
 import { connect } from 'react-redux';
 import axios from 'axios';
-import { setChat, addChat } from '../../redux/actions/chatActions';
+import { getChat, addChat } from '../../redux/actions/chatActions';
 import { setActualUser, updateUsers } from '../../redux/actions/userActions';
 import GroupChat from './groupChat';
 import PrivateChat from './privateChat';
@@ -28,13 +28,7 @@ function Chats(props) {
   }, [])
 
   useEffect( () => {
-    axios.get('http://localhost:5000/chats')
-      .then( resp => {
-        props.setChat(resp.data)
-      })
-      .catch( err => {
-        console.log(err);
-      })
+    props.getChat()
   }, [props.chat.chatNameId])
 
   useEffect( () => {
@@ -45,7 +39,7 @@ function Chats(props) {
     return () => {
       socket.off();
     }
-  }, [props.chat])
+  }, [props.chat.chat])
 
   useEffect( () => {
     socket.on('receiveUsersStatusBack', (id) => {
@@ -67,7 +61,7 @@ function Chats(props) {
       setCreateButtonVisible(!createButtonVisible);
     }
   }
-
+  console.log(props.chat.chat);
   return (
     <div id='chats'>
       <div>
@@ -122,4 +116,4 @@ const mapStateToProps = state => {
   }
 }
 
-export default connect(mapStateToProps, { setChat, addChat, setActualUser, updateUsers })(Chats);
+export default connect(mapStateToProps, { getChat, addChat, setActualUser, updateUsers })(Chats);

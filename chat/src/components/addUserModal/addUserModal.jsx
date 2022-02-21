@@ -1,9 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import './addUserModal.sass';
+import io from 'socket.io-client';
+import { updateChat } from '../../redux/actions/chatActions';
+const socket = io.connect('http://localhost:5000');
 
 function AddUserModal(props) {
   const [filterName, setFilterName] = useState('');
+  const [listOfChatUsers, setListOfChatUsers] = useState([]);
+
+  useEffect( () => {
+    const list = props.chat.chat.filter( chat => chat._id === props.chatId)
+      .map(chat => chat.users)
+      .flat();
+    setListOfChatUsers(list)
+  }, [props.chat])
 
   useEffect( () => {
     function hideModalListener(e) {
@@ -27,8 +38,18 @@ function AddUserModal(props) {
     elem.style.display = 'none';
   }
 
-  function addUserToGroup(userId) {
-    console.log(userId);
+  useEffect( () => {
+    socket.on('receiveUpdatedChatBack', ({ chatId, name, privateType, users }) => {
+      props.updateChat({_id: chatId, name, privateType, users})
+    })
+
+    return () => {
+      socket.off();
+    }
+  }, [props.chat.chat])
+
+  function addUserToGroup(userId, chatId) {
+    socket.emit('updateGroupChat', {chatId, userId})
   }
 
   return (
@@ -44,12 +65,13 @@ function AddUserModal(props) {
           <input value={filterName} onChange={ e => setFilterName(e.target.value)} placeholder='search user'/>
           <div>
             {
-              props.users.users.filter( user => user.name.toLowerCase().includes(filterName.toLowerCase()) || user.lastName.toLowerCase().includes(filterName.toLowerCase()))
+              props.users.users.filter( user => !listOfChatUsers.includes(user._id) )
+                .filter( user => user.name.toLowerCase().includes(filterName.toLowerCase()) || user.lastName.toLowerCase().includes(filterName.toLowerCase()))
                 .filter( (user, i) => i<15)
                 .map( user => (
                   <div className='user-list-item' key={user._id}>
                     <span>{user.name + " " + user.lastName}</span>
-                    <img className='add-user-icon' alt='add_user' src={require('../../imgs/add-user.png').default} onClick={ () => addUserToGroup(user._id)} />
+                    <img className='add-user-icon' alt='add_user' src={require('../../imgs/add-user.png').default} onClick={ () => addUserToGroup(user._id, props.chat.chatNameId)} />
                   </div>
                 ))
             }
@@ -67,4 +89,4 @@ const mapStateToProps = state => {
   }
 }
 
-export default connect(mapStateToProps, { })(AddUserModal);
+export default connect(mapStateToProps, { updateChat })(AddUserModal);

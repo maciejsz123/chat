@@ -9,26 +9,11 @@ router.route('/').get( (req, res) => {
     .catch( err => res.status(400).json('Error: ' + err))
 })
 
-io.on('connection', socket => {
-  socket.on('message', ({ userId, chatId, message }) => {
-    try {
-      const newMessage = new Message({ userId, chatId, message});
-      newMessage.save()
-        .then( data => {
-          return data._id;
-        })
-        .then( data => {
-          io.emit('receiveMessageBack', { messageId: data, userId, chatId, message })
-        })
-    } catch(err) {
-      throw(err);
-    }
-  })
-
-  socket.on('disconnect', () => {
-    console.log('disconnected');
-  })
-});
+router.route('/:id').delete( (req,res) => {
+  Message.findByIdAndDelete(req.params.id)
+    .then( chat => res.json(`${chat} deleted`))
+    .catch( err => res.status(400).json('Error' + err))
+})
 
 /*router.route('/add').post(urlencodedParser, (req, res) => {
 
@@ -43,10 +28,20 @@ io.on('connection', socket => {
     .catch( err => res.send(err))
 })*/
 
-router.route('/:id').delete( (req,res) => {
-  Message.findByIdAndDelete(req.params.id)
-    .then( chat => res.json(`${chat} deleted`))
-    .catch( err => res.status(400).json('Error' + err))
-})
+function messageSocket({ userId, chatId, message }) {
+  try {
+    const newMessage = new Message({ userId, chatId, message});
+    newMessage.save()
+      .then( data => {
+        return data._id;
+      })
+      .then( data => {
+        io.emit('receiveMessageBack', { messageId: data, userId, chatId, message })
+      })
+  } catch(err) {
+    throw(err);
+  }
+}
 
 module.exports = router;
+exports.messageSocket = messageSocket;

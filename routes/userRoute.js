@@ -57,18 +57,4 @@ router.route('/register').post(urlencodedParser, (req, res) => {
   })
 })
 
-let usersOnline = {};
-io.on('connection', socket => {
-
-  socket.on('sendUserStatus', ( id ) => {
-    usersOnline[socket.id] = id;
-    io.emit('receiveUsersStatusBack', { usersOnline });
-  })
-
-  socket.on('disconnect', () => {
-    delete usersOnline[socket.id];
-    io.emit('receiveUsersStatusBack', { usersOnline });
-  })
-});
-
 module.exports = router;
