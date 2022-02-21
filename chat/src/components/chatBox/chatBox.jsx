@@ -4,7 +4,6 @@ import './chatBox.sass';
 import MyMessage from '../message/myMessage';
 import OtherUserMessage from '../message/otherUserMessage';
 import { addMessageToChat, getMessages } from '../../redux/actions/chatActions';
-import axios from 'axios';
 import io from 'socket.io-client';
 const socket = io.connect('http://localhost:5000');
 
@@ -36,7 +35,7 @@ function ChatBox(props) {
   }, [props.chat])
 
   function sendMessage(e) {
-    if(e._reactName === 'onClick' || e.key === "Enter" && message.trim().length > 0) {
+    if((e._reactName === 'onClick' || e.key === "Enter") && message.trim().length > 0) {
       socket.emit('message', ({ userId: props.actualUser._id, chatId: props.chat.chatNameId._id, message }))
       setMessage('');
     }

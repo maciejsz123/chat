@@ -2,7 +2,6 @@ import React from 'react';
 import './loginForm.sass';
 import { connect } from 'react-redux';
 import { setLogin, setPassword, setActualUser, getUsers } from '../../redux/actions/userActions';
-import io from 'socket.io-client';
 const axios = require('axios');
 
 function LoginForm(props) {

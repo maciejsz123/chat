@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './chats.sass';
 import { connect } from 'react-redux';
-import axios from 'axios';
 import { getChat, addChat } from '../../redux/actions/chatActions';
 import { setActualUser, updateUsers } from '../../redux/actions/userActions';
 import GroupChat from './groupChat';

@@ -5,7 +5,6 @@ import Contacts from '../contacts/contacts';
 import LoginPage from '../loginForm/loginPage';
 import { connect } from 'react-redux';
 import './mainPage.sass';
-const axios = require('axios');
 
 function MainPage(props) {
   if(!props.actualUser) {
