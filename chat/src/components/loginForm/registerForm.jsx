@@ -7,6 +7,7 @@ const axios = require('axios');
 function RegisterForm(props) {
   const [name, setName] = useState('');
   const [lastName, setLastName] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
   function register(e) {
     e.preventDefault();
@@ -17,7 +18,14 @@ function RegisterForm(props) {
         lastName: lastName
       })
       .then( resp => {
-        console.log('registered');
+        if(resp.data.code === 11000) {
+          setErrorMessage('user arleady exists')
+        } else if(resp.data.name === 'ValidationError') {
+          setErrorMessage(resp.data.message)
+        } else {
+          setErrorMessage('')
+        }
+        console.log(resp.data);
       })
       .catch( err => {
         console.log(err.data);
@@ -79,6 +87,7 @@ function RegisterForm(props) {
             <button className='submit-button'>register</button>
           </div>
         </form>
+        <div className='input-error'>{errorMessage}</div>
       </div>
   )
 }
