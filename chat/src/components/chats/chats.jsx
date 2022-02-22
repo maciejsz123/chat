@@ -7,7 +7,7 @@ import GroupChat from './groupChat';
 import PrivateChat from './privateChat';
 import Logout from '../logout/logout';
 import io from 'socket.io-client';
-const socket = io.connect('http://localhost:5000');
+const socket = io.connect('/');
 
 function Chats(props) {
   const [createButtonVisible, setCreateButtonVisible] = useState(true);

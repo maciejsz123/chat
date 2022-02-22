@@ -6,7 +6,7 @@ import axios from 'axios';
 export const getChat = () => async dispatch => {
   dispatch(getChatRequest());
   try {
-    const resp = await axios.get('http://localhost:5000/chats');
+    const resp = await axios.get('/chats');
     dispatch(getChatSuccess(resp.data));
   } catch(err) {
     dispatch(getChatError(err));
@@ -36,7 +36,7 @@ function getChatError(payload) {
 export const getMessages = (chatId) => async dispatch => {
   dispatch(getMessagesRequest());
   try {
-    const resp = await axios.get('http://localhost:5000/messages');
+    const resp = await axios.get('/messages');
     const filteredResp = resp.data.filter( message => message.chatId === chatId);
     dispatch(getMessagesSuccess(filteredResp));
   } catch(err) {

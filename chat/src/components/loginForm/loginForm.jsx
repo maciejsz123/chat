@@ -7,7 +7,7 @@ const axios = require('axios');
 function LoginForm(props) {
   function sendData(e) {
     e.preventDefault();
-    axios.post('http://localhost:5000/users/login', {
+    axios.post('/users/login', {
         username: props.user.login,
         password: props.user.password
       })

@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import './addUserModal.sass';
 import io from 'socket.io-client';
 import { updateChat } from '../../redux/actions/chatActions';
-const socket = io.connect('http://localhost:5000');
+const socket = io.connect('/');
 
 function AddUserModal(props) {
   const [filterName, setFilterName] = useState('');
@@ -43,7 +43,7 @@ function AddUserModal(props) {
       socket.off();
     }
   })
-  
+
   function addUserToGroup(userId, chatId) {
     socket.emit('updateGroupChat', {chatId, userId})
   }

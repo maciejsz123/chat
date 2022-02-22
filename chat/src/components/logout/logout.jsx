@@ -4,7 +4,7 @@ import { setActualUser } from '../../redux/actions/userActions';
 import { setChatName } from '../../redux/actions/chatActions';
 import { connect } from 'react-redux';
 import io from 'socket.io-client';
-const socket = io.connect('http://localhost:5000');
+const socket = io.connect('/');
 
 function Logout(props) {
   function logout() {

@@ -3,7 +3,7 @@ import './contacts.sass';
 import { connect } from 'react-redux';
 import { addChat, setChatName } from '../../redux/actions/chatActions';
 import io from 'socket.io-client';
-const socket = io.connect('http://localhost:5000');
+const socket = io.connect('/');
 
 function Contacts(props) {
   function createPrivateChat(user) {

@@ -5,7 +5,7 @@ import MyMessage from '../message/myMessage';
 import OtherUserMessage from '../message/otherUserMessage';
 import { addMessageToChat, getMessages } from '../../redux/actions/chatActions';
 import io from 'socket.io-client';
-const socket = io.connect('http://localhost:5000');
+const socket = io.connect('/');
 
 function ChatBox(props) {
   const [message, setMessage] = useState('');
@@ -75,7 +75,7 @@ function ChatBox(props) {
       return <MyMessage user={elem.userId} createdAt={formatedCreatedAt(elem.createdAt)} message={elem.message} key={elem._id} />;
     })
   }
-  
+
   return (
     <div id='chat-div'>
       <div id='chat-box'>

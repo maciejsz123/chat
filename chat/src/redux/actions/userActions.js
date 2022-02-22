@@ -5,7 +5,7 @@ import axios from 'axios';
 export const getUsers = () => async dispatch => {
   dispatch(getUsersRequest());
   try {
-    const resp = await axios.get('http://localhost:5000/users');
+    const resp = await axios.get('/users');
     dispatch(getUsersSuccess(resp.data));
   } catch(err) {
     dispatch(getUsersError(err))
