@@ -5,6 +5,7 @@ import { getChat, addChat } from '../../redux/actions/chatActions';
 import { setActualUser, updateUsers } from '../../redux/actions/userActions';
 import GroupChat from './groupChat';
 import PrivateChat from './privateChat';
+import Logout from '../logout/logout';
 import io from 'socket.io-client';
 const socket = io.connect('http://localhost:5000');
 
@@ -67,7 +68,10 @@ function Chats(props) {
     <div id='chats'>
       <div>
         <div>
-          <div id='chatbox-name'><b>Private</b></div>
+          <div id='chatbox-name'>
+            <b>Private</b>
+            <Logout />
+          </div>
           <PrivateChat />
         </div>
         <div>

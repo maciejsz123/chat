@@ -39,7 +39,9 @@ function Contacts(props) {
   ))
   return (
     <div id='contacts'>
-      <div id='chatbox-name'><b>list of users</b></div>
+      <div id='chatbox-name'>
+        <b>list of users</b>
+      </div>
       {users}
     </div>
   )

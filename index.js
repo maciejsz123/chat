@@ -33,6 +33,15 @@ io.on('connection', socket => {
     io.emit('receiveUsersStatusBack', { usersOnline });
   })
 
+  socket.on('logout', (id) => {
+    for(user in usersOnline) {
+      if(usersOnline[user] === id) {
+        delete usersOnline[user];
+      }
+    }
+    io.emit('receiveUsersStatusBack', { usersOnline });
+  })
+
   socket.on('disconnect', () => {
     delete usersOnline[socket.id];
     io.emit('receiveUsersStatusBack', { usersOnline });
