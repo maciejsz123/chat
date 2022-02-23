@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 import './mainPage.sass';
 
 function MainPage(props) {
-  if(!props.actualUser) {
+  if(!props.actualUser || props.actualUser === 'error') {
     return <LoginPage />
   } else {
 

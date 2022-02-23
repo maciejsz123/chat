@@ -53,6 +53,7 @@ function LoginForm(props) {
             <button className='submit-button'>login</button>
           </div>
         </form>
+        {props.user.actualUser === 'error' ? <div className='login-error'>invalid login or password</div> : <div></div>}
       </div>
   )
 }
