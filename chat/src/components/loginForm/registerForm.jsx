@@ -8,6 +8,7 @@ function RegisterForm(props) {
   const [name, setName] = useState('');
   const [lastName, setLastName] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const [userRegistered, setUserRegistered] = useState('');
 
   function register(e) {
     e.preventDefault();
@@ -22,10 +23,12 @@ function RegisterForm(props) {
           setErrorMessage('user arleady exists')
         } else if(resp.data.name === 'ValidationError') {
           setErrorMessage(resp.data.message)
+        } else if(resp.data === 'User added') {
+          setUserRegistered('user succesfully registered');
+          setErrorMessage('');
         } else {
           setErrorMessage('')
         }
-        console.log(resp.data);
       })
       .catch( err => {
         console.log(err.data);
@@ -88,6 +91,7 @@ function RegisterForm(props) {
           </div>
         </form>
         <div className='input-error'>{errorMessage}</div>
+        <div style={{fontSize: '13px'}}>{userRegistered}</div>
       </div>
   )
 }
