@@ -7,7 +7,15 @@ require('dotenv').config();
 const PORT = process.env.PORT || 5000;
 
 const ATLAS_URI = process.env.ATLAS_URI;
-mongoose.connect(ATLAS_URI);
+mongoose.connect(ATLAS_URI;
+    {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    }
+  )
+  .then(() => console.log("MongoDB has been connected"))
+  .catch((err) => console.log(err));
+
 
 const app = express();
 const http = require('http').createServer(app);
