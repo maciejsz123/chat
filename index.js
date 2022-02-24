@@ -19,6 +19,10 @@ const io = require('socket.io')(http, {
 
 exports.io = io;
 
+http.listen(PORT, () => {
+  console.log('listening on:' + PORT);
+});
+
 const { createChatSocket, updateGroupChatSocket } = require('./routes/chatRoute');
 const { messageSocket } = require('./routes/messageRoute');
 
@@ -51,10 +55,6 @@ io.on('connection', socket => {
 
 app.use(cors());
 app.use(express.json());
-
-http.listen(PORT, () => {
-  console.log('listening on:' + PORT);
-});
 
 const { userRouter } = require('./routes/userRoute');
 const { messageRouter } = require('./routes/messageRoute');
