@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
+const path = require('path');
 
 require('dotenv').config();
 const PORT = process.env.PORT || 5000;
@@ -62,3 +63,11 @@ const { chatRouter } = require('./routes/chatRoute');
 app.use('/users', userRouter);
 app.use('/messages', messageRouter);
 app.use('/chats', chatRouter);
+
+if(process.env.NODE_ENV === 'production') {
+  app.use(express.static('client/build'));
+
+  app.get('*', (req, res) => {
+    res.sendFile(path.reslove(__dirname, 'client', 'build', 'index.html'))
+  })
+}
