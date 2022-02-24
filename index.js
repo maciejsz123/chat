@@ -3,7 +3,7 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 const path = require('path');
 
-require('dotenv').config();
+require('dotenv').config({ path: 'ENV_FILENAME' });
 const PORT = process.env.PORT || 5000;
 
 const ATLAS_URI = process.env.ATLAS_URI;
