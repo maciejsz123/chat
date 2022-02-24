@@ -37,7 +37,7 @@ io.on('connection', socket => {
     usersOnline[socket.id] = id;
     io.emit('receiveUsersStatusBack', { usersOnline });
   })
-
+  
   socket.on('logout', (id) => {
     for(user in usersOnline) {
       if(usersOnline[user] === id) {
