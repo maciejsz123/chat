@@ -37,7 +37,7 @@ io.on('connection', socket => {
     usersOnline[socket.id] = id;
     io.emit('receiveUsersStatusBack', { usersOnline });
   })
-  
+
   socket.on('logout', (id) => {
     for(user in usersOnline) {
       if(usersOnline[user] === id) {
@@ -61,7 +61,7 @@ const { messageRouter } = require('./routes/messageRoute');
 const { chatRouter } = require('./routes/chatRoute');
 
 if(process.env.NODE_ENV === 'production') {
-  app.use(express.static('client/build'));
+  app.use(express.static('chat/build'));
 
   app.get('*', (req, res) => {
     res.sendFile(path.reslove(__dirname, 'client', 'build', 'index.html'))
