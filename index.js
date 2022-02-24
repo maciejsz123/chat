@@ -60,10 +60,6 @@ const { userRouter } = require('./routes/userRoute');
 const { messageRouter } = require('./routes/messageRoute');
 const { chatRouter } = require('./routes/chatRoute');
 
-app.use('/users', userRouter);
-app.use('/messages', messageRouter);
-app.use('/chats', chatRouter);
-
 if(process.env.NODE_ENV === 'production') {
   app.use(express.static('client/build'));
 
@@ -71,3 +67,7 @@ if(process.env.NODE_ENV === 'production') {
     res.sendFile(path.reslove(__dirname, 'client', 'build', 'index.html'))
   })
 }
+
+app.use('/users', userRouter);
+app.use('/messages', messageRouter);
+app.use('/chats', chatRouter);
