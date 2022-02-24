@@ -7,7 +7,7 @@ require('dotenv').config({ path: 'ENV_FILENAME' });
 const PORT = process.env.PORT || 5000;
 
 const ATLAS_URI = process.env.ATLAS_URI;
-mongoose.connect(ATLAS_URI);
+mongoose.connect(ATLAS_URI,{ useNewUrlParser: true }));
 
 const app = express();
 const http = require('http').createServer(app);
