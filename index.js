@@ -61,10 +61,10 @@ const { messageRouter } = require('./routes/messageRoute');
 const { chatRouter } = require('./routes/chatRoute');
 
 if(process.env.NODE_ENV === 'production') {
-  app.use(express.static('chat/build'));
+  app.use(express.static(path.resolve(__dirname, "./chat/build")));
 
   app.get('*', (req, res) => {
-    res.sendFile(path.reslove(__dirname, 'client', 'build', 'index.html'))
+    res.sendFile(path.reslove(__dirname, 'chat', 'build', 'index.html'))
   })
 }
 
