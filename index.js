@@ -6,8 +6,8 @@ const path = require('path');
 require('dotenv').config();
 const PORT = process.env.PORT || 5000;
 
-const ATLAS_URI = process.env.ATLAS_URI;
-mongoose.connect(ATLAS_URI);
+const MONGODB_URI = process.env.MONGODB_URI;
+mongoose.connect(MONGODB_URI);
 
 const app = express();
 const http = require('http').createServer(app);
