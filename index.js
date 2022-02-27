@@ -3,11 +3,15 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 const path = require('path');
 
-require('dotenv').config({ path: path.resolve(__dirname, './.env') });
+require('dotenv').config();
 const PORT = process.env.PORT || 5000;
 
 const ATLAS_URI = process.env.ATLAS_URI;
-mongoose.connect(ATLAS_URI);
+mongoose.connect(ATLAS_URI, {
+    useUnifiedTopology: true,
+    useNewUrlParser: true,
+    useCreateIndex: true,
+});
 
 const app = express();
 const http = require('http').createServer(app);
