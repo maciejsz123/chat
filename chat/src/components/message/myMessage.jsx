@@ -5,8 +5,11 @@ const avatarStyle = {display: 'flex', padding: '5px', margin: '2px', borderRadiu
 
 function MyMessage(props) {
 
-  const user = props.listOfUsers.find( v => v._id === props.user)
-  const initials = user.name.substring(0,1) + '' + user.lastName.substring(0,1)
+  const initials = '';
+  if(props.listOfUsers.length) {
+    const user = props.listOfUsers.find( v => v._id === props.user);
+    initials = user.name.substring(0,1) + '' + user.lastName.substring(0,1);
+  }
 
   return(
     <div style={{display: 'flex', justifyContent: 'end'}}>
