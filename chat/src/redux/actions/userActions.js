@@ -5,7 +5,7 @@ import axios from 'axios';
 export const getUsers = () => async dispatch => {
   dispatch(getUsersRequest());
   try {
-    const resp = await axios.get('/users');
+    const resp = await axios.get('https://calm-island-98118.herokuapp.com/users');
     dispatch(getUsersSuccess(resp.data));
   } catch(err) {
     dispatch(getUsersError(err))
