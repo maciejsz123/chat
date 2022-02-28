@@ -6,7 +6,6 @@ export const getUsers = () => async dispatch => {
   dispatch(getUsersRequest());
   try {
     const resp = await axios.get('/users');
-    console.log(resp.data);
     dispatch(getUsersSuccess(resp.data));
   } catch(err) {
     dispatch(getUsersError(err))
