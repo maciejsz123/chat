@@ -7,7 +7,7 @@ function OtherUserMessage(props) {
 
   let initials = '';
   let user = '';
-  if(props.listOfUsers.length) {
+  if(props.listOfUsers) {
     user = props.listOfUsers.find( v => v._id === props.user);
     initials = user.name.substring(0,1) + '' + user.lastName.substring(0,1);
   }
