@@ -6,13 +6,13 @@ const initialState = {
   login: 'test',
   password: 'test',
   actualUser: null,
-  users: [],
   loading: false,
   error: null,
-  usersOnline: []
+  usersOnline: [],
+  users: []
 }
 
-export default function reducer(state = initialState, action) {
+const userReducer = (state = initialState, action) => {
   switch(action.type) {
     case SET_LOGIN:
       return {
@@ -44,7 +44,8 @@ export default function reducer(state = initialState, action) {
       return {
         ...state,
         loading: false,
-        error: action.payload
+        error: action.payload,
+        users: []
       }
     case UPDATE_USERS:
       const usersOnlineArray = Object.keys(action.payload.usersOnline).map( key => action.payload.usersOnline[key])
@@ -61,3 +62,6 @@ export default function reducer(state = initialState, action) {
       return state
   }
 }
+
+
+export default userReducer;

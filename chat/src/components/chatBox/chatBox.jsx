@@ -33,7 +33,7 @@ function ChatBox(props) {
       socket.off();
     }
   }, [props.chat])
-
+  
   function sendMessage(e) {
     if((e._reactName === 'onClick' || e.key === "Enter") && message.trim().length > 0) {
       socket.emit('message', ({ userId: props.actualUser._id, chatId: props.chat.chatNameId._id, message }))
