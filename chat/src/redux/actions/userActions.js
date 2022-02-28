@@ -2,10 +2,10 @@ import { SET_LOGIN, SET_PASSWORD, SET_ACTUAL_USER, UPDATE_USERS,
   GET_USERS_REQUEST, GET_USERS_SUCCESS, GET_USERS_ERROR } from './types';
 import axios from 'axios';
 
-export const getUsers = () => async dispatch => {
+export const getUsers = () => dispatch => {
   dispatch(getUsersRequest());
   try {
-    const resp = await axios.get('https://calm-island-98118.herokuapp.com/users');
+    const resp = axios.get('https://calm-island-98118.herokuapp.com/users');
     dispatch(getUsersSuccess(resp.data));
   } catch(err) {
     dispatch(getUsersError(err))
