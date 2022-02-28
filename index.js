@@ -12,14 +12,14 @@ mongoose.connect(MONGODB_URI);
 const app = express();
 const http = require('http').createServer(app);
 
+http.listen(PORT, () => {
+  console.log('listening on:' + PORT);
+});
+
 const io = require('socket.io')(http, {
   cors: {
     origin: '*',
   }
-});
-
-http.listen(PORT, () => {
-  console.log('listening on:' + PORT);
 });
 
 exports.io = io;
