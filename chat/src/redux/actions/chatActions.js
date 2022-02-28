@@ -7,7 +7,6 @@ export const getChat = () => async dispatch => {
   dispatch(getChatRequest());
   try {
     const resp = await axios.get('/chats');
-    console.log(resp);
     dispatch(getChatSuccess(resp.data));
   } catch(err) {
     dispatch(getChatError(err));
