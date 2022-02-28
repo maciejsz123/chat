@@ -7,7 +7,7 @@ const bcrypt = require('bcrypt');
 
 const secret_key = process.env.SECRET_KEY || 'secret';
 
-router.route('/').get( (req, res) => {
+router.route('/').get(urlencodedParser, (req, res) => {
   User.find()
     .then( users => res.json(users))
     .catch( err => res.status(400).json('Error: ' + err))
